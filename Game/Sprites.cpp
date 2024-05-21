@@ -12,7 +12,7 @@ namespace Game {
 
         // Player Sprite creation
 
-        auto* sprite = new Sprite("../res/demosheet.png");
+        auto* sprite = new Sprite("res/demosheet.png");
 
         sprite->getMap()["idleu"].setDimensions({36, 52});
         sprite->getMap()["idled"].setDimensions({36, 52});
@@ -51,7 +51,7 @@ namespace Game {
 
         // Goomba sprite creation
 
-        auto* goomba = new Sprite("../res/goomba.png");
+        auto* goomba = new Sprite("res/goomba.png");
 
         goomba->getMap()["idle"].setDimensions({22,22});
 
@@ -63,7 +63,7 @@ namespace Game {
 
         // Tileset sprite creation
 
-        auto* tileset = new Sprite("../res/tileset.png");
+        auto* tileset = new Sprite("res/tileset.png");
 
         tileset->getMap()["tileset"].setDimensions({34,34});
 
