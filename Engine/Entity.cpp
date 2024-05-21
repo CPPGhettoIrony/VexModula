@@ -16,7 +16,7 @@ namespace Engine {
 
         float width = anim.getDimensions()[0];
         Vec2 p = Vec2{pos[0] - width / 2, pos[1]} - view;
-        spr->playAnimation(currentAnim,p,5,frame,counter);
+        spr->playAnimation(currentAnim,p,5,frame,counter, drawSize);
     }
 
     void Entity::wallcollision(const Rect & rect) {

@@ -47,8 +47,8 @@ namespace Engine {
 
         bool isLoaded() const {return is_loaded;}
 
-        void playAnimation(const string&, const Vec2&, size_t, size_t&, size_t&) const;
-        void playAnimationFrame(const string&, const Vec2&, size_t) const;
+        void playAnimation(const string&, const Vec2&, size_t, size_t&, size_t&, const Vec2& size = {1,1}) const;
+        void playAnimationFrame(const string&, const Vec2&, size_t, const Vec2& size = {1,1}) const;
     };
 
     typedef AnimatedSet<Animation,Vec2> HitboxSet;

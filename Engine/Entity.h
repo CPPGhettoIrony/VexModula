@@ -28,12 +28,14 @@ namespace Engine {
     protected:
 
         string currentAnim;
+        Vec2 drawSize;
 
         void orderByY(int layer=0);
 
     public:
 
-        explicit Entity(const string& n, Sprite* s, const Vec2& d={}, const Vec2& p={}, float dp=.0): name(n), initpos(p), spr(s), pos(p), frame(0), counter(0), solid(false), depth(dp) {
+        explicit Entity(const string& n, Sprite* s, const Vec2& d={}, const Vec2& p={}, float dp=.0):
+            name(n), initpos(p), spr(s), pos(p), frame(0), counter(0), solid(false), depth(dp), drawSize{1,1} {
             collisionRect = Rect{pos[0]-d[0]/2,pos[1],d[0],d[1]};
         }
 

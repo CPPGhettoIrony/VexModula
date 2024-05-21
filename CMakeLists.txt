@@ -32,5 +32,6 @@ add_executable(${PROJECT_NAME} main.cpp
         Game/TileMaps.cpp
         Game/TileMaps.h
         Engine/Mail.cpp
-        Engine/Mail.h)
+        Engine/Mail.h
+        Script/angelscript/angelscript.h)
 target_link_libraries(${PROJECT_NAME} raylib)

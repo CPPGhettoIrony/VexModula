@@ -40,6 +40,9 @@ namespace Game {
         if (IsKeyReleased(KEY_UP))    currentAnim = "idleu";
         if (IsKeyReleased(KEY_DOWN))  currentAnim = "idled";
 
+        drawSize.at(0) = IsKeyDown(KEY_A)?-1:1;
+        drawSize.at(1) = IsKeyDown(KEY_S)?-1:1;
+
         move(vel);
 
         orderByY();

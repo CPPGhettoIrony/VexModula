@@ -43,27 +43,27 @@ namespace Engine {
         for(const auto& s: sprites) delete s.second;
     }
 
-    void Sprite::playAnimation(const string& name, const Vec2& pos, size_t duration, size_t& frame, size_t& counter) const {
+    void Sprite::playAnimation(const string& name, const Vec2& pos, size_t duration, size_t& frame, size_t& counter, const Vec2& size) const {
 
         auto animation = frameMap.at(name);
 
         Vec2 vec{operator()(name, duration, frame, counter)};
 
         Rectangle rec;
-        rec.width = animation.getDimensions()[0]; rec.height = animation.getDimensions()[1];
+        rec.width = animation.getDimensions()[0] * size[0]; rec.height = animation.getDimensions()[1] * size[1];
         rec.x = vec[0]; rec.y = vec[1];
 
         DrawTextureRec(texture,rec,pos.toRaylibVector(),WHITE);
     }
 
-    void Sprite::playAnimationFrame(const string & name, const Vec2 & pos, size_t frame) const {
+    void Sprite::playAnimationFrame(const string & name, const Vec2 & pos, size_t frame, const Vec2& size) const {
 
         auto animation = frameMap.at(name);
 
         Vec2 vec{operator[](name)[frame]};
 
         Rectangle rec;
-        rec.width = animation.getDimensions()[0]; rec.height = animation.getDimensions()[1];
+        rec.width = animation.getDimensions()[0] * size[0]; rec.height = animation.getDimensions()[1] * size[1];
         rec.x = vec[0]; rec.y = vec[1];
 
         DrawTextureRec(texture,rec,pos.toRaylibVector(),WHITE);
