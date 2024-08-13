@@ -5,7 +5,7 @@
 #ifndef NOWHEREFIGHTERS_EXCEPTION_H
 #define NOWHEREFIGHTERS_EXCEPTION_H
 
-#include <string.h>
+#include <string>
 using std::string;
 
 namespace Engine {

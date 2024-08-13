@@ -7,6 +7,9 @@
 #include "Game/TileMaps.h"
 
 #include "Engine/App.h"
+#include "Engine/Exception.h"
+
+#include "Script/ScriptWrapper.h"
 
 int screenWidth = 1000;
 int screenHeight = 750;

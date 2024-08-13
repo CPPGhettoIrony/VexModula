@@ -5,22 +5,35 @@
 #ifndef NOWHEREFIGHTERS_SCRIPTWRAPPER_H
 #define NOWHEREFIGHTERS_SCRIPTWRAPPER_H
 
-#include "angelscript/angelscript.h"
-#include "add_on/scriptstdstring/scriptstdstring.h"
-#include "add_on/scriptbuilder/scriptbuilder.h"
+#include <vector>
+#include <string>
+#include "angelscript/include/angelscript.h"
+#include "angelscript/add_on/scriptstdstring/scriptstdstring.h"
+#include "angelscript/add_on/scriptbuilder/scriptbuilder.h"
+
+using std::vector, std::string;
 
 namespace Engine {
     class ScriptWrapper {
         asIScriptEngine* engine;
-        asIScriptContext *ctx;
-        CScriptBuilder* builder;
+        asIScriptContext* ctx;
     public:
 
         ScriptWrapper();
 
-        void CreateModule() {}
+        asIScriptModule* getModule(const char* module) {
+            return engine->GetModule(module);
+        };
+
+        asIScriptFunction* getFunction(asIScriptModule* module, const char* func) {
+            return module->GetFunctionByDecl(func);
+        };
+
+        void createModule(const char* name, const vector<string>& files);
+        void runFunction(asIScriptFunction* func);
 
         ~ScriptWrapper() {
+            ctx->Release();
             engine->ShutDownAndRelease();
         }
 
