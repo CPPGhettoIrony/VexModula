@@ -14,7 +14,7 @@ namespace Engine {
         const string _what;
     public:
         Exception(const string& reason): _what(reason) {}
-        const string& what() {return _what;}
+        const string& what() const {return _what;}
     };
 
 } // Engine

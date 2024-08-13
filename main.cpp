@@ -14,13 +14,24 @@
 int screenWidth = 1000;
 int screenHeight = 750;
 
-using Game::Player, Game::TestRoom, Engine::App, std::cout, std::endl;
+using Game::Player, Game::TestRoom, Engine::App, Engine::ScriptWrapper, Engine::Exception, std::cout, std::endl, std::cerr;
 
 int main()
 {
 
     InitWindow(screenWidth, screenHeight, "Nowhere Fighters");
     SetTargetFPS(60);
+
+    // Testing Angelscript integration
+
+    try {
+        ScriptWrapper SW;
+        SW.createModule("Test", {"res/test.as"});
+        auto* func = SW.getFunction(SW.getModule("Test"),"void main()");
+        SW.runFunction(func);
+    } catch (const Exception& e) {
+        cerr << "[ERROR] " << e.what() << '\n';
+    }
 
     // Sprite creation function
 
