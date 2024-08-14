@@ -22,17 +22,6 @@ int main()
     InitWindow(screenWidth, screenHeight, "Nowhere Fighters");
     SetTargetFPS(60);
 
-    // Testing Angelscript integration
-
-    try {
-        ScriptWrapper SW;
-        SW.createModule("Test", {"res/test.as"});
-        auto* func = SW.getFunction(SW.getModule("Test"),"void main()");
-        SW.runFunction(func);
-    } catch (const Exception& e) {
-        cerr << "[ERROR] " << e.what() << '\n';
-    }
-
     // Sprite creation function
 
     Game::createSprites();
@@ -47,6 +36,18 @@ int main()
 
     // We create the overall application class, adding two rooms that use testRoom as a room type and
     // two different functions, these functions create the entities and walls (and add them) to the room when it loads
+
+    // Testing Angelscript integration
+
+    try {
+        ScriptWrapper SW;
+
+        SW.createModule("Test", {"../res/test.as"});
+        auto* func = SW.getFunction(SW.getModule("Test"),"void main()");
+        SW.runFunction(func);
+    } catch (const Exception& e) {
+        cerr << "[ERROR] " << e.what() << '\n';
+    }
 
     App Application({(float)screenWidth,(float)screenHeight});
     Application.addRoom("Room1",&testRoom,Game::buildRoom1);

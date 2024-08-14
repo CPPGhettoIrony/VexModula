@@ -7,6 +7,11 @@
 
 #include <vector>
 #include <string>
+
+#include "../Engine/Entity.h"
+#include "../Engine/Room.h"
+#include "../Engine/Sprite.h"
+
 #include "angelscript/include/angelscript.h"
 #include "angelscript/add_on/scriptstdstring/scriptstdstring.h"
 #include "angelscript/add_on/scriptbuilder/scriptbuilder.h"
@@ -14,6 +19,7 @@
 using std::vector, std::string;
 
 namespace Engine {
+
     class ScriptWrapper {
         asIScriptEngine* engine;
         asIScriptContext* ctx;

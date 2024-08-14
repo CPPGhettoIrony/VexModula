@@ -31,7 +31,8 @@ namespace Engine {
         string path;
         bool is_loaded;
     public:
-        explicit Sprite(const string& p): path(p), AnimatedSet(), is_loaded(false) {}
+        explicit Sprite(const string& p = ""): path(p), AnimatedSet(), is_loaded(false) {}
+        Sprite& operator=(const Sprite& in) noexcept = default ;
 
         void Load() {
             if(is_loaded) return;
@@ -49,6 +50,10 @@ namespace Engine {
 
         void playAnimation(const string&, const Vec2&, size_t, size_t&, size_t&, const Vec2& size = {1,1}) const;
         void playAnimationFrame(const string&, const Vec2&, size_t, const Vec2& size = {1,1}) const;
+
+        //Necessary functions to make the Sprite class work in angelscript
+        void AddRef() {}
+        void ReleaseRef() {}
     };
 
     typedef AnimatedSet<Animation,Vec2> HitboxSet;
@@ -79,6 +84,8 @@ namespace Engine {
 
     bool operator<(const layeredSprite& a, const layeredSprite& b);
 
+    //Necessary functions to make the Sprite class work in angelscript
+    Sprite* spriteFactory();
 }
 
 #endif //NOWHEREFIGHTERS_SPRITE_H

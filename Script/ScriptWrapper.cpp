@@ -10,12 +10,19 @@ using std::cout, std::cerr, std::endl;
 
 void MessageCallback(const asSMessageInfo *msg, void *param)
 {
-    const char *type = "ERR ";
-    if( msg->type == asMSGTYPE_WARNING )
+    string type = "ERROR";
+    std::basic_ostream<char>* ostream = &cerr;
+
+    if( msg->type == asMSGTYPE_WARNING ) {
         type = "WARN";
-    else if( msg->type == asMSGTYPE_INFORMATION )
+        ostream = &cout;
+    } else if( msg->type == asMSGTYPE_INFORMATION ) {
         type = "INFO";
-    printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
+        ostream = &cout;
+    }
+
+    *ostream << '[' << type << "] " << msg->section << " (" << msg->row << ", " << msg->col << ") : " << msg->message << '\n';
+
 }
 
 void print(const string& in) {
@@ -33,31 +40,35 @@ namespace Engine {
 
         ctx = engine->CreateContext();
 
-        auto r = engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
-        if (r < 0) throw Engine::Exception("Failed to set MessageCallback function");
+        engine->SetMessageCallback(asFUNCTION(MessageCallback), 0, asCALL_CDECL);
 
         RegisterStdString(engine);
 
-        r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
-        if (r < 0) throw Engine::Exception("Failed setting print Function");
+        engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
 
     }
 
     void ScriptWrapper::createModule(const char* name, const vector<string>& files) {
 
         CScriptBuilder builder;
-        builder.StartNewModule(engine, name); //string("Failed starting new module: ") + name);
+        auto r = builder.StartNewModule(engine, name);
+        if (r < 0) throw Engine::Exception(string("Failed starting new module: ") + name);
 
-        for(const auto& file: files)
-            builder.AddSectionFromFile(file.c_str()); // string("Script ") + file + " contains errors");
+        for(const auto& file: files) {
+            r = builder.AddSectionFromFile(file.c_str());
+            if (r < 0) throw Engine::Exception(string("Script ") + file + " contains errors");
+        }
 
-       builder.BuildModule(); //"Failed to build module, check scripts for errors");
+        r = builder.BuildModule();
+        if (r < 0) throw Engine::Exception("Failed to build module, check scripts for errors");
 
     }
 
     void ScriptWrapper::runFunction(asIScriptFunction *func) {
         ctx->Prepare(func);
-        ctx->Execute(); // "Failed function execution");
+        auto r = ctx->Execute();
+        if (r < 0) throw Engine::Exception("Failed function execution");
     }
 
     //void ScriptWrapper::

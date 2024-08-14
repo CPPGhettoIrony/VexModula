@@ -1,3 +1,6 @@
 void main() {
-    print("Hello Angelscript!\n");
+    print("Hello Angelscript! The memory address of the Player sprite is: ");
+    // Sprite spr = getSprite("Player");
+    // debugPtr(spr);
+    flush();
 }

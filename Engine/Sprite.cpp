@@ -74,4 +74,9 @@ namespace Engine {
         return a.elements.second<b.elements.second;
     }
 
+    //Necessary functions to make the Sprite class work in angelscript
+    Sprite* spriteFactory() {
+        return new Sprite();
+    }
+
 }
