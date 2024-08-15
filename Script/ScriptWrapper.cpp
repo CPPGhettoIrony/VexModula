@@ -46,8 +46,6 @@ namespace Engine {
         RegisterStdString(engine);
 
         engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print<string>), asCALL_CDECL);
-        engine->RegisterGlobalFunction("void print(int)", asFUNCTION(print<int>), asCALL_CDECL);
-
         engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
 
         // Register Vector objects
