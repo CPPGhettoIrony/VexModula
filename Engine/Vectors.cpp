@@ -35,7 +35,10 @@ namespace Engine {
     }
 
     Vector::Vector(const Vector& vec): floats(new float[vec.size]), size(vec.size) {
-        for(size_t i=0; i<size; ++i) floats[i] = vec[i];
+        for(size_t i=0; i<size; ++i) {
+            if(vec[i] != nullvalue) floats[i] = vec[i];
+            else floats[i] = 0;
+        }
     }
 
     Vector Vector::operator+(const Vector& vec) const {

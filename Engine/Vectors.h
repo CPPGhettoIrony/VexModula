@@ -10,6 +10,8 @@
 #include <raylib.h>
 #include <cmath>
 
+#include "ScriptObjects.h"
+
 using std::size_t, std::ostream;
 
 typedef Vector2 rayVec2;
@@ -20,7 +22,7 @@ namespace Engine {
         return (a>b && a<=b+c);
     }
 
-    class Vector {
+    class Vector: public CRef {
 
     protected:
         size_t size;
@@ -72,7 +74,7 @@ namespace Engine {
     class Vec2 : public Vector {
     public:
         Vec2(): Vector({}, 2) {}
-        Vec2(const float& a=0, const float& b=0): Vector({a,b}, 2) {}
+        Vec2(const float& a, const float& b): Vector({a,b}, 2) {}
         explicit Vec2(const Vector& vec): Vector{{}, 2} {
             op([&](size_t i){return vec[i];});
         }
@@ -85,9 +87,7 @@ namespace Engine {
     public:
         Rect(): Vector({}, 4) {}
         explicit Rect(const float& a, const float& b, const float& c, const float& d): Vector({a,b,c,d}) {}
-        Rect(const Vector& vec): Vector{{},4} {
-            op([&](size_t i){return vec[i];});
-        }
+        Rect(const Vector& vec): Vector{{vec[0], vec[1], 0, 0},4} {}
         [[nodiscard]] Rectangle toRaylibRectangle() const;
         [[nodiscard]] Vec2 getPos() const {return Vec2{floats[0], floats[1]};}
         [[nodiscard]] Vec2 getDim() const {return Vec2{floats[2], floats[3]};}
@@ -102,6 +102,16 @@ namespace Engine {
     };
 
     ostream& operator<<(ostream&, const Vector&);
+
+    inline Vec2* Vec2Factory_Default() {return new Vec2;}
+    inline Vec2* Vec2Factory_Init(float a, float b) {return new Vec2(a, b);}
+    inline Vec2* Vec2Factory_Copy(const Vec2& vec) {return new Vec2(vec);}
+    inline Vec2* Vec2Factory_CopyRect(const Rect& rect) {return new Vec2(rect);}
+
+    inline Rect* RectFactory_Default() {return new Rect;}
+    inline Rect* RectFactory_Init(float a, float b, float c, float d) {return new Rect(a, b, c, d);}
+    inline Rect* RectFactory_Copy(const Rect& rect) {return new Rect(rect);}
+    inline Rect* RectFactory_CopyVec2(const Vec2& vec) {return new Rect(vec);}
 
 }
 

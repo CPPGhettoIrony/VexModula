@@ -25,7 +25,8 @@ void MessageCallback(const asSMessageInfo *msg, void *param)
 
 }
 
-void print(const string& in) {
+template <typename T>
+void print(const T& in) {
     cout << in;
 }
 
@@ -44,8 +45,35 @@ namespace Engine {
 
         RegisterStdString(engine);
 
-        engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print<string>), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(int)", asFUNCTION(print<int>), asCALL_CDECL);
+
         engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
+
+        // Register Vector objects
+        engine->RegisterObjectType("Vec2", 0, asOBJ_REF);
+        engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f()", asFUNCTION(Vec2Factory_Default), asCALL_CDECL);
+        engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(float a, float b)", asFUNCTION(Vec2Factory_Init), asCALL_CDECL);
+        engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(const Vec2& in)", asFUNCTION(Vec2Factory_Copy), asCALL_CDECL);
+        engine->RegisterObjectBehaviour("Vec2", asBEHAVE_ADDREF, "void f()", asMETHOD(Vec2, CRef::addRef), asCALL_THISCALL);
+        engine->RegisterObjectBehaviour("Vec2", asBEHAVE_RELEASE, "void f()", asMETHOD(Vec2, CRef::release), asCALL_THISCALL);
+
+        engine->RegisterObjectType("Rect", 0, asOBJ_REF);
+        engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f()", asFUNCTION(RectFactory_Default), asCALL_CDECL);
+        engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(float, float, float, float)", asFUNCTION(RectFactory_Init), asCALL_CDECL);
+        engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(const Rect& in)", asFUNCTION(RectFactory_Copy), asCALL_CDECL);
+        engine->RegisterObjectBehaviour("Rect", asBEHAVE_ADDREF, "void f()", asMETHOD(Rect, CRef::addRef), asCALL_THISCALL);
+        engine->RegisterObjectBehaviour("Rect", asBEHAVE_RELEASE, "void f()", asMETHOD(Rect, CRef::release), asCALL_THISCALL);
+
+        engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(const Vec2& in)", asFUNCTION(RectFactory_CopyVec2), asCALL_CDECL);
+        engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(const Rect& in)", asFUNCTION(Vec2Factory_CopyRect), asCALL_CDECL);
+
+        engine->RegisterObjectMethod("Vec2", "float at(uint32)", asMETHOD(Vec2,Vector::at), asCALL_THISCALL);
+
+        engine->RegisterObjectMethod("Rect", "float at(uint32)", asMETHOD(Rect,Vector::at), asCALL_THISCALL);
+
+        engine->RegisterGlobalFunction("void print(const Vec2 &in)", asFUNCTION(print<Vec2>), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(const Rect &in)", asFUNCTION(print<Rect>), asCALL_CDECL);
 
     }
 
