@@ -34,7 +34,7 @@ namespace Engine {
 
     public:
 
-        explicit Entity(const string& n, Sprite* s, const Vec2& d={}, const Vec2& p={}, float dp=.0):
+        explicit Entity(const string& n, Sprite* s, const Vec2& d, const Vec2& p, float dp=.0):
             name(n), initpos(p), spr(s), pos(p), frame(0), counter(0), solid(false), depth(dp), drawSize{1,1} {
             collisionRect = Rect{pos[0]-d[0]/2,pos[1],d[0],d[1]};
         }
@@ -79,7 +79,7 @@ namespace Engine {
     }
 
     inline void Entity::setPos(const Vec2 & p) {
-        delta = p-pos;
+        delta = Vec2(p - pos);
         pos = p;
         collisionRect += delta;
     }

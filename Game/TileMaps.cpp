@@ -11,7 +11,7 @@ namespace Game {
 
     void createTileMaps() {
 
-        auto* tilemap0 = new TileMap("tileset0", "../res/tilemap0.txt", {34, 34}, true);
+        auto* tilemap0 = new TileMap("tileset0", "../res/tilemap0.txt", Engine::Vec2{34, 34}, true);
 
         TileMapContainer::addTileMap("tilemap0", tilemap0);
 

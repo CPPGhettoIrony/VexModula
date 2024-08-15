@@ -15,7 +15,7 @@ namespace Engine {
         Animation anim = spr->getMap().at(currentAnim);
 
         float width = anim.getDimensions()[0];
-        Vec2 p = Vec2{pos[0] - width / 2, pos[1]} - view;
+        Vec2 p{pos[0] - width / 2, pos[1]}; p -= view;
         spr->playAnimation(currentAnim,p,5,frame,counter, drawSize);
     }
 

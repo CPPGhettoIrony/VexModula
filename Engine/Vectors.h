@@ -8,7 +8,7 @@
 #include <initializer_list>
 #include <ostream>
 #include <raylib.h>
-#include <math.h>
+#include <cmath>
 
 using std::size_t, std::ostream;
 
@@ -27,13 +27,14 @@ namespace Engine {
         float* floats;
         const static float nullvalue;
         template <typename func>
-        void op(func);
+            void op(func);
 
     public:
 
         enum{X,Y,W,H};
 
         Vector(const std::initializer_list<float>&,size_t);
+        Vector(const std::initializer_list<float>&);
         Vector(const Vector&);
 
         Vector operator+(const Vector&) const;
@@ -70,24 +71,24 @@ namespace Engine {
 
     class Vec2 : public Vector {
     public:
-        Vec2(const std::initializer_list<float>& list = {}): Vector(list, 2) {}
-        Vec2(const Vector& vec): Vector{{}, 2} {
+        explicit Vec2(const float& a=0, const float& b=0): Vector({a,b}, 2) {}
+        explicit Vec2(const Vector& vec): Vector{{}, 2} {
             op([&](size_t i){return vec[i];});
         }
         [[nodiscard ]] rayVec2 toRaylibVector() const;
         Vec2& operator=(const Vec2& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec.floats[i]; return *this;}
-        float getDegrees() {return atan2(floats[X], floats[Y]) * 180 / 3.141;}
+        [[nodiscard]] float getDegrees() const {return atan2f(floats[X], floats[Y]) * 180 / 3.141;}
     };
 
     class Rect : public Vector {
     public:
-        Rect(const std::initializer_list<float>& list = {}): Vector(list,4) {}
-        Rect(const Vector& vec): Vector{{},4} {
+        explicit Rect(const float& a=0, const float& b=0, const float& c=0, const float& d=0): Vector({a,b,c,d}) {}
+        explicit Rect(const Vector& vec): Vector{{},4} {
             op([&](size_t i){return vec[i];});
         }
         [[nodiscard]] Rectangle toRaylibRectangle() const;
-        [[nodiscard]] Vec2 getPos() const {return {floats[0], floats[1]};}
-        [[nodiscard]] Vec2 getDim() const {return {floats[2], floats[3]};}
+        [[nodiscard]] Vec2 getPos() const {return Vec2{floats[0], floats[1]};}
+        [[nodiscard]] Vec2 getDim() const {return Vec2{floats[2], floats[3]};}
         [[nodiscard]] Vec2 getMidPoint() const {return Vec2(getPos() + getDim() / 2);}
         Rect& operator=(const Rect& vec) {for(size_t i=0;i<4;++i) floats[i] = vec.floats[i]; return *this;}
 

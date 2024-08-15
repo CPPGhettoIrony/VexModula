@@ -20,7 +20,7 @@ namespace Engine {
     class Animation: public vector<Vec2> {
         Vec2 dim;
     public:
-        explicit Animation(const Vec2& d={}): vector(), dim(d) {}
+        explicit Animation(const Vec2& d= Vec2{}): vector(), dim(d) {}
 
         void setDimensions(const Vec2& vec) { dim = vec;}
         [[nodiscard]] const Vec2& getDimensions() const {return dim;}
@@ -31,7 +31,7 @@ namespace Engine {
         string path;
         bool is_loaded;
     public:
-        explicit Sprite(const string& p = ""): path(p), AnimatedSet(), is_loaded(false) {}
+        explicit Sprite(const string& p = ""): path(p), AnimatedSet(), is_loaded(false), texture(Texture2D{}) {}
         Sprite& operator=(const Sprite& in) noexcept = default ;
 
         void Load() {
@@ -48,8 +48,8 @@ namespace Engine {
 
         bool isLoaded() const {return is_loaded;}
 
-        void playAnimation(const string&, const Vec2&, size_t, size_t&, size_t&, const Vec2& size = {1,1}) const;
-        void playAnimationFrame(const string&, const Vec2&, size_t, const Vec2& size = {1,1}) const;
+        void playAnimation(const string&, const Vec2&, size_t, size_t&, size_t&, const Vec2& size = Vec2{1,1}) const;
+        void playAnimationFrame(const string&, const Vec2&, size_t, const Vec2& size = Vec2{1,1}) const;
 
         //Necessary functions to make the Sprite class work in angelscript
         void AddRef() {}

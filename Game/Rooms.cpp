@@ -5,7 +5,10 @@
 #include "Player.h"
 #include "NPC.h"
 #include "Rooms.h"
+
 #include "../Engine/TileMap.h"
+
+using Engine::Vec2;
 
 namespace Game {
 
@@ -39,17 +42,17 @@ namespace Game {
         testRoom->getWalls().insert(rects[2]);
         testRoom->getWalls().insert(rects[3]);
 
-        auto* player = new Player({60, 30});
+        auto* player = new Player(Vec2{60, 30});
         testRoom->addEntity(player);
 
-        auto* goomba = new NPC({200,200});
+        auto* goomba = new NPC(Vec2{200,200});
         testRoom->addEntity(goomba);
 
         testRoom->setTileMap(Engine::TileMapContainer::getTileMap("tilemap0"));
     }
 
     void buildRoom2(Room* testRoom) {
-        auto* player = new Player({100, 300});
+        auto* player = new Player(Vec2{100, 300});
 
         Engine::Rect* rects[] = {
                 new Rect{300,300,20,600},

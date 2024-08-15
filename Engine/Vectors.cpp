@@ -16,7 +16,16 @@ namespace Engine {
 
     const float Vector::nullvalue(0);
 
-    Vector::Vector(const std::initializer_list<float>& list,size_t s): floats(new float[size]), size(s) {
+    Vector::Vector(const std::initializer_list<float>& list, size_t s): size(s), floats(new float[size]) {
+        size_t i = 0;
+        for(const auto f : list) {
+            floats[i] = f;
+            ++i;
+        }
+        for(;i<size;++i) floats[i] = 0;
+    }
+
+    Vector::Vector(const std::initializer_list<float>& list): size(list.size()), floats(new float[list.size()]) {
         size_t i = 0;
         for(const auto f : list) {
             floats[i] = f;

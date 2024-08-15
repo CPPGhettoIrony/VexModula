@@ -12,7 +12,7 @@ namespace Game {
 
     void Player::update() {
 
-        Engine::Vec2 vel = {0, 0};
+        Engine::Vec2 vel{0, 0};
         const static float speed = 5;
 
         if (IsKeyDown(KEY_RIGHT)) {

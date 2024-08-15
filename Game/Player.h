@@ -16,7 +16,7 @@ namespace Game {
     class Player : public Entity {
     public:
 
-        explicit Player(const Vec2& pos) : Entity("Player", SpriteContainer::getSprite("Player"), {32, 30}, pos) {
+        explicit Player(const Vec2& pos) : Entity("Player", SpriteContainer::getSprite("Player"), Vec2{32, 30}, pos) {
             setSolid();
             currentAnim = "idled";
         }

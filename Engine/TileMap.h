@@ -17,7 +17,7 @@ namespace Engine {
         size_t n;
         float depth;
         Vec2 pos;
-        explicit tile(const Vec2& p={0,0}, size_t i=0, float d=0): pos(p), depth(d), n(i) {}
+        explicit tile(const Vec2& p = Vec2{}, size_t i=0, float d=0): n(i), depth(d), pos(p) {}
     };
 
     bool operator<(const tile& a, const tile& b);

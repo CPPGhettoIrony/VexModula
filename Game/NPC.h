@@ -15,7 +15,7 @@ namespace Game {
     class NPC : public Entity{
     public:
 
-        explicit NPC(const Vec2& pos): Entity("NPC",SpriteContainer::getSprite("NPC"),{22,22},pos) {
+        explicit NPC(const Vec2& pos): Entity("NPC",SpriteContainer::getSprite("NPC"),Vec2{22,22},pos) {
             setSolid();
             currentAnim = "idle";
         }
