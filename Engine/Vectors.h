@@ -71,7 +71,8 @@ namespace Engine {
 
     class Vec2 : public Vector {
     public:
-        explicit Vec2(const float& a=0, const float& b=0): Vector({a,b}, 2) {}
+        Vec2(): Vector({}, 2) {}
+        Vec2(const float& a=0, const float& b=0): Vector({a,b}, 2) {}
         explicit Vec2(const Vector& vec): Vector{{}, 2} {
             op([&](size_t i){return vec[i];});
         }
@@ -82,8 +83,9 @@ namespace Engine {
 
     class Rect : public Vector {
     public:
-        explicit Rect(const float& a=0, const float& b=0, const float& c=0, const float& d=0): Vector({a,b,c,d}) {}
-        explicit Rect(const Vector& vec): Vector{{},4} {
+        Rect(): Vector({}, 4) {}
+        explicit Rect(const float& a, const float& b, const float& c, const float& d): Vector({a,b,c,d}) {}
+        Rect(const Vector& vec): Vector{{},4} {
             op([&](size_t i){return vec[i];});
         }
         [[nodiscard]] Rectangle toRaylibRectangle() const;
