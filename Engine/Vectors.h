@@ -35,6 +35,7 @@ namespace Engine {
 
         enum{X,Y,W,H};
 
+        Vector(size_t size=0);
         Vector(const std::initializer_list<float>&,size_t);
         Vector(const std::initializer_list<float>&);
         Vector(const Vector&);
@@ -81,6 +82,9 @@ namespace Engine {
         [[nodiscard ]] rayVec2 toRaylibVector() const;
         Vec2& operator=(const Vec2& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec.floats[i]; return *this;}
         [[nodiscard]] float getDegrees() const {return atan2f(floats[X], floats[Y]) * 180 / 3.141;}
+
+        Vec2& assignVector(const Vector& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec[i]; return *this;}
+
     };
 
     class Rect : public Vector {
@@ -99,9 +103,16 @@ namespace Engine {
         [[nodiscard]] float getTriAngle() const {
             return -Vec2(Vec2{floats[X]+floats[W],floats[Y]+floats[H]}-getMidPoint()).getDegrees();
         }
+
+        Rect& assignVector(const Vector& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec[i]; return *this;}
+
+        [[nodiscard]] Rect opAdd(const Rect& rect) const;
+        [[nodiscard]] Rect opSub(const Rect& rect) const;
     };
 
     ostream& operator<<(ostream&, const Vector&);
+
+    inline Vector* VectorFactory(size_t size) {return new Vector(size);}
 
     inline Vec2* Vec2Factory_Default() {return new Vec2;}
     inline Vec2* Vec2Factory_Init(float a, float b) {return new Vec2(a, b);}

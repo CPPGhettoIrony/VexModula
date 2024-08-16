@@ -16,6 +16,10 @@ namespace Engine {
 
     const float Vector::nullvalue(0);
 
+    Vector::Vector(size_t s): size(s), floats(new float[size]) {
+        for(size_t i = 0; i<size; ++i) floats[i] = 0;
+    }
+
     Vector::Vector(const std::initializer_list<float>& list, size_t s): size(s), floats(new float[size]) {
         size_t i = 0;
         for(const auto f : list) {
@@ -181,6 +185,19 @@ namespace Engine {
 
         return ret;
     }
+
+    Rect Rect::opAdd(const Rect &rect) const {
+        Rect ret = *this;
+        ret += rect;
+        return ret;
+    }
+
+    Rect Rect::opSub(const Rect &rect) const {
+        Rect ret = *this;
+        ret -= rect;
+        return ret;
+    }
+
 
 
 }
