@@ -83,10 +83,10 @@ namespace Engine {
             engine->RegisterObjectMethod("Vec2", "Vec2& opSub(const Vec2& in) const", asMETHODPR(Vec2, opSub, (const Vec2&) const, Vec2&), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "Vec2& opMul(const Vec2& in) const", asMETHODPR(Vec2, opMul, (const Vec2&) const, Vec2&), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "Vec2& opDiv(const Vec2& in) const", asMETHODPR(Vec2, opDiv, (const Vec2&) const, Vec2&), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Vec2", "Vec2& opAddAssign(const Vec2& in) const", asMETHODPR(Vec2, opAddAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Vec2", "Vec2& opSubAssign(const Vec2& in) const", asMETHODPR(Vec2, opSubAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Vec2", "Vec2& opMulAssign(const Vec2& in) const", asMETHODPR(Vec2, opMulAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Vec2", "Vec2& opDivAssign(const Vec2& in) const", asMETHODPR(Vec2, opDivAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opAddAssign(const Vec2& in)", asMETHODPR(Vec2, opAddAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opSubAssign(const Vec2& in)", asMETHODPR(Vec2, opSubAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opMulAssign(const Vec2& in)", asMETHODPR(Vec2, opMulAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opDivAssign(const Vec2& in)", asMETHODPR(Vec2, opDivAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
 
             engine->RegisterObjectMethod("Vec2", "float& at(uint32)", asMETHOD(Vec2, at), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "float& opIndex(uint32) const", asMETHOD(Vec2, operator[]) , asCALL_THISCALL);

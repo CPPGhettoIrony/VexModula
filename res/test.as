@@ -6,9 +6,9 @@ void main() {
     Rect G(C);
     Vec2 H(F);
 
-    C = B;
+    C = B*Vec2(2,2)/Vec2(1,3) + A;
+
     E.at(1) = E[2];
-    C.at(0) = A[1]+2;
     E += E;
     E = E * F;
     F /= E;
