@@ -83,7 +83,16 @@ namespace Engine {
         Vec2& operator=(const Vec2& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec.floats[i]; return *this;}
         [[nodiscard]] float getDegrees() const {return atan2f(floats[X], floats[Y]) * 180 / 3.141;}
 
-        Vec2& assignVector(const Vector& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec[i]; return *this;}
+        // To make operators in Angelscript with reference types, this must be done in a special way
+        [[nodiscard]] Vec2& opAdd(const Vec2& vec) const;
+        [[nodiscard]] Vec2& opSub(const Vec2& vec) const;
+        [[nodiscard]] Vec2& opMul(const Vec2& vec) const;
+        [[nodiscard]] Vec2& opDiv(const Vec2& vec) const;
+
+        [[nodiscard]] Vec2& opAddAssign(const Vec2& vec);
+        [[nodiscard]] Vec2& opSubAssign(const Vec2& vec);
+        [[nodiscard]] Vec2& opMulAssign(const Vec2& vec);
+        [[nodiscard]] Vec2& opDivAssign(const Vec2& vec);
 
     };
 
@@ -104,10 +113,16 @@ namespace Engine {
             return -Vec2(Vec2{floats[X]+floats[W],floats[Y]+floats[H]}-getMidPoint()).getDegrees();
         }
 
-        Rect& assignVector(const Vector& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec[i]; return *this;}
+        // To make operators in Angelscript with reference types, this must be done in a special way
+        [[nodiscard]] Rect& opAdd(const Rect& rect) const;
+        [[nodiscard]] Rect& opSub(const Rect& rect) const;
+        [[nodiscard]] Rect& opMul(const Rect& rect) const;
+        [[nodiscard]] Rect& opDiv(const Rect& rect) const;
 
-        [[nodiscard]] Rect opAdd(const Rect& rect) const;
-        [[nodiscard]] Rect opSub(const Rect& rect) const;
+        [[nodiscard]] Rect& opAddAssign(const Rect& rect);
+        [[nodiscard]] Rect& opSubAssign(const Rect& rect);
+        [[nodiscard]] Rect& opMulAssign(const Rect& rect);
+        [[nodiscard]] Rect& opDivAssign(const Rect& rect);
     };
 
     ostream& operator<<(ostream&, const Vector&);

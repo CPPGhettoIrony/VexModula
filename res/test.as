@@ -1,7 +1,7 @@
 void main() {
 
     Vec2 A, B(1,2), C;
-    Rect D, E(1,2,3,4), F(E);
+    Rect D, E(.1,2,.3,4), F(E);
 
     Rect G(C);
     Vec2 H(F);
@@ -9,9 +9,9 @@ void main() {
     C = B;
     E.at(1) = E[2];
     C.at(0) = A[1]+2;
-
-    //Rect I;
-    //I = E + F;
+    E += E;
+    E = E * F;
+    F /= E;
 
     print(A); print('\n');
     print(B); print('\n');
@@ -21,6 +21,6 @@ void main() {
     print(F); print('\n');
     print(G); print('\n');
     print(H); print('\n');
-    print(E.Collide(F));
+    print(E + F - A);
     flush();
 }

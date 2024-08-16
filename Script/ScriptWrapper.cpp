@@ -29,6 +29,7 @@ void MessageCallback(const asSMessageInfo *msg, void *param)
 void printVector(const Engine::Vector& in) {cout << in;}
 void printString(const string& in) {cout << in;}
 void printFloat(float in) {cout << in;}
+void printInt(int in) {cout << in;}
 
 void flush() {cout << endl;}
 
@@ -46,6 +47,7 @@ namespace Engine {
 
         engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(printString), asCALL_CDECL);
         engine->RegisterGlobalFunction("void print(float)", asFUNCTION(printFloat), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(int16)", asFUNCTION(printInt), asCALL_CDECL);
         engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
 
         {
@@ -68,7 +70,23 @@ namespace Engine {
             engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(const Vec2& in)", asFUNCTION(RectFactory_CopyVec2), asCALL_CDECL);
             engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(const Rect& in)", asFUNCTION(Vec2Factory_CopyRect), asCALL_CDECL);
 
-            engine->RegisterObjectMethod("Rect", "Vec2& Collide(const Rect& in) const", asMETHODPR(Rect, Collide, (const Rect&) const, Vec2), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opAdd(const Rect& in) const", asMETHODPR(Rect, opAdd, (const Rect&) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opSub(const Rect& in) const", asMETHODPR(Rect, opSub, (const Rect&) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opMul(const Rect& in) const", asMETHODPR(Rect, opMul, (const Rect&) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opDiv(const Rect& in) const", asMETHODPR(Rect, opDiv, (const Rect&) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opAddAssign(const Rect& in)", asMETHODPR(Rect, opAddAssign, (const Rect&), Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opSubAssign(const Rect& in)", asMETHODPR(Rect, opSubAssign, (const Rect&), Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opMulAssign(const Rect& in)", asMETHODPR(Rect, opMulAssign, (const Rect&), Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opDivAssign(const Rect& in)", asMETHODPR(Rect, opDivAssign, (const Rect&), Rect&), asCALL_THISCALL);
+
+            engine->RegisterObjectMethod("Vec2", "Vec2& opAdd(const Vec2& in) const", asMETHODPR(Vec2, opAdd, (const Vec2&) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opSub(const Vec2& in) const", asMETHODPR(Vec2, opSub, (const Vec2&) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opMul(const Vec2& in) const", asMETHODPR(Vec2, opMul, (const Vec2&) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opDiv(const Vec2& in) const", asMETHODPR(Vec2, opDiv, (const Vec2&) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opAddAssign(const Vec2& in) const", asMETHODPR(Vec2, opAddAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opSubAssign(const Vec2& in) const", asMETHODPR(Vec2, opSubAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opMulAssign(const Vec2& in) const", asMETHODPR(Vec2, opMulAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opDivAssign(const Vec2& in) const", asMETHODPR(Vec2, opDivAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
 
             engine->RegisterObjectMethod("Vec2", "float& at(uint32)", asMETHOD(Vec2, at), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "float& opIndex(uint32) const", asMETHOD(Vec2, operator[]) , asCALL_THISCALL);

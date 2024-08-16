@@ -186,18 +186,92 @@ namespace Engine {
         return ret;
     }
 
-    Rect Rect::opAdd(const Rect &rect) const {
-        Rect ret = *this;
-        ret += rect;
-        return ret;
+    Rect& Rect::opAdd(const Rect &rect) const {
+        Rect* ret = new Rect(*this);
+        *ret += rect;
+        return *ret;
     }
 
-    Rect Rect::opSub(const Rect &rect) const {
-        Rect ret = *this;
-        ret -= rect;
-        return ret;
+    Rect& Rect::opSub(const Rect &rect) const {
+        Rect* ret = new Rect(*this);
+        *ret -= rect;
+        return *ret;
     }
 
+    Rect& Rect::opMul(const Rect &rect) const {
+        Rect* ret = new Rect(*this);
+        *ret = *ret * rect;
+        return *ret;
+    }
 
+    Rect& Rect::opDiv(const Rect &rect) const {
+        Rect* ret = new Rect(*this);
+        *ret = *ret / rect;
+        return *ret;
+    }
+
+    Rect& Rect::opAddAssign(const Rect &rect) {
+        *this += rect;
+        return *this;
+    }
+
+    Rect& Rect::opSubAssign(const Rect &rect) {
+        *this -= rect;
+        return *this;
+    }
+
+    Rect& Rect::opMulAssign(const Rect &rect) {
+        *this = *this * rect;
+        return *this;
+    }
+
+    Rect& Rect::opDivAssign(const Rect &rect) {
+        *this = *this * rect;
+        return *this;
+    }
+
+    Vec2& Vec2::opAdd(const Vec2 &vec) const {
+        Vec2* ret = new Vec2(*this);
+        *ret += vec;
+        return *ret;
+    }
+
+    Vec2& Vec2::opSub(const Vec2 &vec) const {
+        Vec2* ret = new Vec2(*this);
+        *ret -= vec;
+        return *ret;
+    }
+
+    Vec2& Vec2::opMul(const Vec2 &vec) const {
+        Vec2* ret = Vec2Factory_Init(this->floats[0]*vec[0],this->floats[1]*vec[1]);
+        return *ret;
+    }
+
+    Vec2& Vec2::opDiv(const Vec2 &vec) const {
+        Vec2* ret = Vec2Factory_Init(this->floats[0]/vec[0],this->floats[1]/vec[1]);
+        return *ret;
+    }
+
+    Vec2& Vec2::opAddAssign(const Vec2 &vec) {
+        *this += vec;
+        return *this;
+    }
+
+    Vec2& Vec2::opSubAssign(const Vec2 &vec) {
+        *this -= vec;
+        return *this;
+    }
+
+    Vec2& Vec2::opMulAssign(const Vec2 &vec) {
+        this->floats[0]*=vec[0];
+        this->floats[1]*=vec[1];
+        return *this;
+    }
+
+    Vec2& Vec2::opDivAssign(const Vec2 &vec) {
+        this->floats[0]/=vec[0];
+        this->floats[1]/=vec[1];
+        return *this;
+    }
 
 }
