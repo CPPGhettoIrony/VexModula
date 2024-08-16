@@ -6,6 +6,9 @@ void main() {
     Rect G(C);
     Vec2 H(F);
 
+    E.at(1) = E[2];
+    C.at(0) = A[1];
+
     print(A); print('\n');
     print(B); print('\n');
     print(C); print('\n');
@@ -13,7 +16,5 @@ void main() {
     print(E); print('\n');
     print(F); print('\n');
     print(G); print('\n');
-    print(H); print('\n');
-    // print(0);
-    flush();
+    print(H); flush();
 }

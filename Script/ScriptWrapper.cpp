@@ -25,14 +25,13 @@ void MessageCallback(const asSMessageInfo *msg, void *param)
 
 }
 
-template <typename T>
-void print(const T& in) {
-    cout << in;
-}
+void printVec2(const Engine::Vec2& in) {cout << in;}
+void printRect(const Engine::Rect& in) {cout << in;}
+void printString(const string& in) {cout << in;}
+void printFloat(float in) {cout << in;}
 
-void flush() {
-    cout << endl;
-}
+void flush() {cout << endl;}
+
 
 
 namespace Engine {
@@ -45,7 +44,8 @@ namespace Engine {
 
         RegisterStdString(engine);
 
-        engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print<string>), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(printString), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(float)", asFUNCTION(printFloat), asCALL_CDECL);
         engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
 
         // Register Vector objects
@@ -66,12 +66,14 @@ namespace Engine {
         engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(const Vec2& in)", asFUNCTION(RectFactory_CopyVec2), asCALL_CDECL);
         engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(const Rect& in)", asFUNCTION(Vec2Factory_CopyRect), asCALL_CDECL);
 
-        engine->RegisterObjectMethod("Vec2", "float at(uint32)", asMETHOD(Vec2,Vector::at), asCALL_THISCALL);
+        engine->RegisterObjectMethod("Vec2", "float& at(uint32)", asMETHOD(Vec2, Vector::at), asCALL_THISCALL);
+        engine->RegisterObjectMethod("Vec2", "float& opIndex(uint32) const", asMETHOD(Vec2, Vector::operator[]) , asCALL_THISCALL);
 
-        engine->RegisterObjectMethod("Rect", "float at(uint32)", asMETHOD(Rect,Vector::at), asCALL_THISCALL);
+        engine->RegisterObjectMethod("Rect", "float& at(uint32)", asMETHOD(Rect, Vector::at), asCALL_THISCALL);
+        engine->RegisterObjectMethod("Rect", "float& opIndex(uint32) const", asMETHOD(Rect, Vector::operator[]) , asCALL_THISCALL);
 
-        engine->RegisterGlobalFunction("void print(const Vec2 &in)", asFUNCTION(print<Vec2>), asCALL_CDECL);
-        engine->RegisterGlobalFunction("void print(const Rect &in)", asFUNCTION(print<Rect>), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(const Vec2 &in)", asFUNCTION(printVec2), asCALL_CDECL);
+        engine->RegisterGlobalFunction("void print(const Rect &in)", asFUNCTION(printRect), asCALL_CDECL);
 
     }
 
