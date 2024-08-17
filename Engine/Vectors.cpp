@@ -230,6 +230,78 @@ namespace Engine {
         return *this;
     }
 
+    Rect &Rect::opAdd(float f) const {
+        Rect *ret = new Rect(*this);
+        *ret += f;
+        return *ret;
+    }
+
+    Rect &Rect::opSub(float f) const {
+        Rect *ret = new Rect(*this);
+        *ret -= f;
+        return *ret;
+    }
+
+    Rect &Rect::opMul(float f) const {
+        Rect *ret = RectFactory_Init(floats[0]*f, floats[1]*f, floats[2]*f, floats[3]*f);
+        return *ret;
+    }
+
+    Rect &Rect::opDiv(float f) const {
+        Rect *ret = RectFactory_Init(floats[0]/f, floats[1]/f, floats[2]/f, floats[3]/f);
+        return *ret;
+    }
+
+    Rect &Rect::opAddAssign(float f) {
+        *this += f;
+        return *this;
+    }
+
+    Rect &Rect::opSubAssign(float f) {
+        *this -= f;
+        return *this;
+    }
+
+    Rect &Rect::opMulAssign(float f) {
+        floats[0] *= f;
+        floats[1] *= f;
+        floats[2] *= f;
+        floats[3] *= f;
+        return *this;
+    }
+
+    Rect &Rect::opDivAssign(float f) {
+        floats[0] /= f;
+        floats[1] /= f;
+        floats[2] /= f;
+        floats[3] /= f;
+        return *this;
+    }
+
+    Vec2 &Rect::opGetPos() const {
+        Vec2 *ret = new Vec2(*this);
+        *ret = getPos();
+        return *ret;
+    }
+
+    Vec2 &Rect::opGetDim() const {
+        Vec2 *ret = new Vec2(*this);
+        *ret = getDim();
+        return *ret;
+    }
+
+    Vec2 &Rect::opGetMidPoint() const {
+        Vec2 *ret = new Vec2(*this);
+        *ret = getMidPoint();
+        return *ret;
+    }
+
+    Vec2 &Rect::opCollide(const Rect& R) const {
+        Vec2 *ret = new Vec2(*this);
+        *ret = Collide(R);
+        return *ret;
+    }
+
     Vec2& Vec2::opAdd(const Vec2 &vec) const {
         Vec2* ret = new Vec2(*this);
         *ret += vec;
@@ -243,12 +315,12 @@ namespace Engine {
     }
 
     Vec2& Vec2::opMul(const Vec2 &vec) const {
-        Vec2* ret = Vec2Factory_Init(this->floats[0]*vec[0],this->floats[1]*vec[1]);
+        Vec2* ret = Vec2Factory_Init(floats[0]*vec[0],floats[1]*vec[1]);
         return *ret;
     }
 
     Vec2& Vec2::opDiv(const Vec2 &vec) const {
-        Vec2* ret = Vec2Factory_Init(this->floats[0]/vec[0],this->floats[1]/vec[1]);
+        Vec2* ret = Vec2Factory_Init(floats[0]/vec[0],floats[1]/vec[1]);
         return *ret;
     }
 
@@ -263,14 +335,58 @@ namespace Engine {
     }
 
     Vec2& Vec2::opMulAssign(const Vec2 &vec) {
-        this->floats[0]*=vec[0];
-        this->floats[1]*=vec[1];
+        floats[0]*=vec[0];
+        floats[1]*=vec[1];
         return *this;
     }
 
     Vec2& Vec2::opDivAssign(const Vec2 &vec) {
-        this->floats[0]/=vec[0];
-        this->floats[1]/=vec[1];
+        floats[0]/=vec[0];
+        floats[1]/=vec[1];
+        return *this;
+    }
+
+    Vec2 &Vec2::opAdd(float f) const {
+        Vec2 *ret = new Vec2(*this);
+        *ret += f;
+        return *ret;
+    }
+
+    Vec2 &Vec2::opSub(float f) const {
+        Vec2 *ret = new Vec2(*this);
+        *ret -= f;
+        return *ret;
+    }
+
+    Vec2 &Vec2::opMul(float f) const {
+        Vec2 *ret = Vec2Factory_Init(floats[0]*f, floats[1]*f);
+        return *ret;
+    }
+
+    Vec2 &Vec2::opDiv(float f) const {
+        Vec2 *ret = Vec2Factory_Init(floats[0]/f, floats[1]/f);
+        return *ret;
+    }
+
+    Vec2 &Vec2::opAddAssign(float f) {
+        *this += f;
+        return *this;
+    }
+
+    Vec2 &Vec2::opSubAssign(float f) {
+        *this += f;
+        return *this;
+    }
+
+    Vec2 &Vec2::opMulAssign(float f) {
+        floats[0] *= f;
+        floats[1] *= f;
+        return *this;
+    }
+
+    Vec2 &Vec2::opDivAssign(float f) {
+        floats[0] /= f;
+        floats[1] /= f;
         return *this;
     }
 

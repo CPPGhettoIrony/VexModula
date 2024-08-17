@@ -31,6 +31,11 @@ void printString(const string& in) {cout << in;}
 void printFloat(float in) {cout << in;}
 void printInt(int in) {cout << in;}
 
+void printBool(bool in) {
+    if(in) cout << "true";
+    else cout << "false";
+}
+
 void flush() {cout << endl;}
 
 
@@ -45,13 +50,18 @@ namespace Engine {
 
         RegisterStdString(engine);
 
-        engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(printString), asCALL_CDECL);
-        engine->RegisterGlobalFunction("void print(float)", asFUNCTION(printFloat), asCALL_CDECL);
-        engine->RegisterGlobalFunction("void print(int16)", asFUNCTION(printInt), asCALL_CDECL);
-        engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
-
+        // Register Global Functions
         {
-            // Register Vector objects
+            engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(printString), asCALL_CDECL);
+            engine->RegisterGlobalFunction("void print(bool)", asFUNCTION(printBool), asCALL_CDECL);
+            engine->RegisterGlobalFunction("void print(float)", asFUNCTION(printFloat), asCALL_CDECL);
+            engine->RegisterGlobalFunction("void print(int16)", asFUNCTION(printInt), asCALL_CDECL);
+            engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
+        }
+
+        // Register Vector Classes
+        {
+
 
             engine->RegisterObjectType("Vec2", 0, asOBJ_REF);
             engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f()", asFUNCTION(Vec2Factory_Default), asCALL_CDECL);
@@ -79,6 +89,22 @@ namespace Engine {
             engine->RegisterObjectMethod("Rect", "Rect& opMulAssign(const Rect& in)", asMETHODPR(Rect, opMulAssign, (const Rect&), Rect&), asCALL_THISCALL);
             engine->RegisterObjectMethod("Rect", "Rect& opDivAssign(const Rect& in)", asMETHODPR(Rect, opDivAssign, (const Rect&), Rect&), asCALL_THISCALL);
 
+            engine->RegisterObjectMethod("Rect", "Rect& opAdd(float) const", asMETHODPR(Rect, opAdd, (float) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opSub(float) const", asMETHODPR(Rect, opSub, (float) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opMul(float) const", asMETHODPR(Rect, opMul, (float) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opDiv(float) const", asMETHODPR(Rect, opDiv, (float) const, Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opAddAssign(float)", asMETHODPR(Rect, opAddAssign, (float), Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opSubAssign(float)", asMETHODPR(Rect, opSubAssign, (float), Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opMulAssign(float)", asMETHODPR(Rect, opMulAssign, (float), Rect&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Rect& opDivAssign(float)", asMETHODPR(Rect, opDivAssign, (float), Rect&), asCALL_THISCALL);
+
+            engine->RegisterObjectMethod("Rect", "Vec2& getPos() const", asMETHOD(Rect, opGetPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Vec2& getDim() const", asMETHOD(Rect, opGetDim), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Vec2& getMidPoint() const", asMETHOD(Rect, opGetMidPoint), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "Vec2& Collide(const Rect &in) const", asMETHODPR(Rect, opCollide, (const Rect&) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "bool isColliding(const Rect& in) const", asMETHODPR(Rect, isColliding, (const Rect&) const, bool), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Rect", "float getTriAngle() const", asMETHOD(Rect, getTriAngle), asCALL_THISCALL);
+
             engine->RegisterObjectMethod("Vec2", "Vec2& opAdd(const Vec2& in) const", asMETHODPR(Vec2, opAdd, (const Vec2&) const, Vec2&), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "Vec2& opSub(const Vec2& in) const", asMETHODPR(Vec2, opSub, (const Vec2&) const, Vec2&), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "Vec2& opMul(const Vec2& in) const", asMETHODPR(Vec2, opMul, (const Vec2&) const, Vec2&), asCALL_THISCALL);
@@ -87,6 +113,17 @@ namespace Engine {
             engine->RegisterObjectMethod("Vec2", "Vec2& opSubAssign(const Vec2& in)", asMETHODPR(Vec2, opSubAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "Vec2& opMulAssign(const Vec2& in)", asMETHODPR(Vec2, opMulAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "Vec2& opDivAssign(const Vec2& in)", asMETHODPR(Vec2, opDivAssign, (const Vec2&), Vec2&), asCALL_THISCALL);
+
+            engine->RegisterObjectMethod("Vec2", "Vec2& opAdd(float) const", asMETHODPR(Vec2, opAdd, (float) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opSub(float) const", asMETHODPR(Vec2, opSub, (float) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opMul(float) const", asMETHODPR(Vec2, opMul, (float) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opDiv(float) const", asMETHODPR(Vec2, opDiv, (float) const, Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opAddAssign(float)", asMETHODPR(Vec2, opAddAssign, (float), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opSubAssign(float)", asMETHODPR(Vec2, opSubAssign, (float), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opMulAssign(float)", asMETHODPR(Vec2, opMulAssign, (float), Vec2&), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Vec2", "Vec2& opDivAssign(float)", asMETHODPR(Vec2, opDivAssign, (float), Vec2&), asCALL_THISCALL);
+
+            engine->RegisterObjectMethod("Vec2", "float getDegrees() const", asMETHOD(Vec2, getDegrees), asCALL_THISCALL);
 
             engine->RegisterObjectMethod("Vec2", "float& at(uint32)", asMETHOD(Vec2, at), asCALL_THISCALL);
             engine->RegisterObjectMethod("Vec2", "float& opIndex(uint32) const", asMETHOD(Vec2, operator[]) , asCALL_THISCALL);

@@ -1,26 +1,28 @@
 void main() {
 
-    Vec2 A, B(1,2), C;
-    Rect D, E(.1,2,.3,4), F(E);
+    Vec2 A, B(1,2), C(B);
+    Rect D, E(1,1,2,2), F(E);
 
+    F += 1;
     Rect G(C);
     Vec2 H(F);
 
-    C = B*Vec2(2,2)/Vec2(1,3) + A;
+    print(A + 1); print('\n');
+    print(B - 1); print('\n');
+    print(C * 2); print('\n');
+    print(D / 2); print('\n');
+    print(E + 1); print('\n');
+    print(F - 1); print('\n');
+    print(G * 2); print('\n');
+    print(H / 2); print('\n');
+    print(E + F - A); print('\n');
 
-    E.at(1) = E[2];
-    E += E;
-    E = E * F;
-    F /= E;
+    print(B.getDegrees()); print('\n');
+    print(F.getPos()); print('\n');
+    print(F.getDim()); print('\n');
+    print(F.getMidPoint()); print('\n');
+    print(F.Collide(Rect(0,1,2,2))); print('\n');
+    print(F.isColliding(E)); print('\n');
+    print(F.getTriAngle()); flush();
 
-    print(A); print('\n');
-    print(B); print('\n');
-    print(C); print('\n');
-    print(D); print('\n');
-    print(E); print('\n');
-    print(F); print('\n');
-    print(G); print('\n');
-    print(H); print('\n');
-    print(E + F - A);
-    flush();
 }

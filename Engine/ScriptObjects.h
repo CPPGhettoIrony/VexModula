@@ -5,18 +5,15 @@
 #ifndef SCRIPTOBJECTS_H
 #define SCRIPTOBJECTS_H
 
-namespace Engine {
-
-    class CRef {
-        unsigned long refCount;
-    public:
-        CRef() : refCount(1) {}
-        void addRef() { ++refCount; }
-        void release() { if (--refCount == 0) delete this; }
-    };
-
-}
+#define SETCREF() \
+            friend ScriptWrapper;                                   \
+                                                                \
+            unsigned long refCount;                                 \
+                                                                \
+            void addRef() { ++refCount; }                           \
+            void release() { if (--refCount == 0) delete this; }    \
 
 
+#define SETREFCOUNT() refCount(1)
 
 #endif //SCRIPTOBJECTS_H
