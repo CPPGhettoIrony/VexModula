@@ -7,9 +7,9 @@
 
 #define SETCREF() \
             friend ScriptWrapper;                                   \
-                                                                \
+                                                                    \
             unsigned long refCount;                                 \
-                                                                \
+                                                                    \
             void addRef() { ++refCount; }                           \
             void release() { if (--refCount == 0) delete this; }    \
 
