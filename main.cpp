@@ -43,7 +43,7 @@ int main()
         ScriptWrapper SW;
 
         SW.createModule("Test", {"../res/test.as"});
-        auto* func = SW.getFunction(SW.getModule("Test"),"void main()");
+        auto* func = SW.getEngine()->GetModule("Test")->GetFunctionByDecl("void main()");
         SW.runFunction(func);
     } catch (const Exception& e) {
         cerr << "[ERROR] " << e.what() << '\n';

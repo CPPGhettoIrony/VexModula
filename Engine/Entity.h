@@ -46,6 +46,8 @@ namespace Engine {
         void move(const Vec2&);
         void setPos(const Vec2&);
 
+        void setCurrentAnim(const string& n) {currentAnim = n;}
+
         [[nodiscard]] const Vec2& getPos() const {return pos;}
         [[nodiscard]] const Vec2& getDelta() const {return delta;}
         [[nodiscard]] const Vec2& getInitPos() const {return initpos;}
@@ -59,16 +61,18 @@ namespace Engine {
         void setDepth(float f) {depth = f;}
         void orderByY(int layer=0);
 
-        virtual void draw(const Rect& view);
+        virtual void draw(Rect& view);
         virtual void update() {}
         virtual void init() {}
-        virtual void collision(const Entity&) {}
-        virtual void wallcollision(const Rect&);
+        virtual void collision(Entity&) {}
+        virtual void wallcollision(Rect&);
         virtual void exitView() {}
         virtual void enterView() {}
-        virtual void receive(Entity*, const string&, stringstream&) {}
+        virtual void receive(Entity*, string&, stringstream&) {}
 
         [[nodiscard]] bool isColliding(const Rect& R) const {return collisionRect.isColliding(R);}
+
+        virtual ~Entity() = default;
 
     };
 

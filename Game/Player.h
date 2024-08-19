@@ -21,7 +21,7 @@ namespace Game {
             currentAnim = "idled";
         }
 
-        void draw(const Rect&) override;
+        void draw(Rect&) override;
         void update() override;
 
         void init() override;

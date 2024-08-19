@@ -13,7 +13,7 @@ namespace Game {
         orderByY();
     }
 
-    void NPC::receive(Entity *sender, const string &header, stringstream &data) {
+    void NPC::receive(Entity *sender, string &header, stringstream &data) {
         cout << "Header: " << header << " | Data: " << data.str() << " | Playerpos: " << sender->getPos() << '\n';
     }
 

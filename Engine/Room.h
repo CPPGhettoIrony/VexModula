@@ -41,7 +41,7 @@ namespace Engine {
     public:
 
         explicit Room(const Rect &v) : view(v), tilemap(nullptr), loaded(false) {}
-        ~Room() {if(loaded) Free();}
+        virtual ~Room() {if(loaded) Free();}
 
         void setTileMap(TileMap* t) {tilemap = t; if(tilemap) sprites.insert(t->getTileSet());}
 

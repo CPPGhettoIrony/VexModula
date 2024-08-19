@@ -48,7 +48,7 @@ namespace Game {
         orderByY();
     }
 
-    void Player::draw(const Rect & view) {
+    void Player::draw(Rect & view) {
         Entity::draw(view);
         DrawRectangleLines(getCollisionRect()[0]-view[0],getCollisionRect()[1]-view[1],getCollisionRect()[2],getCollisionRect()[3],BLUE);
     }

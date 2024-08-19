@@ -11,7 +11,7 @@ namespace Engine {
         setDepth(getPos()[1]+getSprite()->getMap()[currentAnim].getDimensions()[1]+(float)layer*App::getWindowDimensions()[1]);
     }
 
-    void Entity::draw(const Rect& view) {
+    void Entity::draw(Rect& view) {
         Animation anim = spr->getMap().at(currentAnim);
 
         float width = anim.getDimensions()[0];
@@ -19,7 +19,7 @@ namespace Engine {
         spr->playAnimation(currentAnim,p,5,frame,counter, drawSize);
     }
 
-    void Entity::wallcollision(const Rect & rect) {
+    void Entity::wallcollision(Rect & rect) {
         move(getCollisionRect().Collide(rect));
     }
 

@@ -37,7 +37,8 @@ add_executable(${PROJECT_NAME} main.cpp
         Script/angelscript/add_on/scriptbuilder/scriptbuilder.cpp
         Script/angelscript/add_on/scriptarray/scriptarray.cpp
         Script/angelscript/add_on/scriptstdstring/scriptstdstring.cpp
-        Script/angelscript/add_on/scriptstdstring/scriptstdstring_utils.cpp)
+        Script/angelscript/add_on/scriptstdstring/scriptstdstring_utils.cpp
+        Script/ScriptObjects.cpp)
 
 option(BUILD_SHARED_LIBS "Build shared library" OFF)
 option(AS_NO_EXCEPTIONS "Disable exception handling in script context" OFF)

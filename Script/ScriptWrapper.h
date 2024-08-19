@@ -11,10 +11,10 @@
 #include "../Engine/Entity.h"
 #include "../Engine/Room.h"
 #include "../Engine/Sprite.h"
+#include "../Engine/Exception.h"
 
 #include "angelscript/include/angelscript.h"
-#include "angelscript/add_on/scriptstdstring/scriptstdstring.h"
-#include "angelscript/add_on/scriptbuilder/scriptbuilder.h"
+
 
 using std::vector, std::string;
 
@@ -27,24 +27,34 @@ namespace Engine {
 
         ScriptWrapper();
 
-        asIScriptModule* getModule(const char* module) {
-            return engine->GetModule(module);
-        };
+        [[nodiscard]] asIScriptEngine* getEngine() const {return engine;}
 
-        asIScriptFunction* getFunction(asIScriptModule* module, const char* func) {
-            return module->GetFunctionByDecl(func);
-        };
+        void createModule(const char* name, const vector<string>& files) const;
+        void runFunction(asIScriptFunction* func) const;
 
-        void createModule(const char* name, const vector<string>& files);
-        void runFunction(asIScriptFunction* func);
+        template<typename F>
+        void runFunctionWithArgs(asIScriptFunction* func, F processArgs) const;
 
         ~ScriptWrapper() {
-            ctx->Release();
             engine->ShutDownAndRelease();
         }
 
     };
-}
 
+    template<typename F>
+    void ScriptWrapper::runFunctionWithArgs(asIScriptFunction* func, F processArgs) const {
+
+        ctx->Prepare(func);
+
+        processArgs(ctx);
+
+        auto r = ctx->Execute();
+        if (r < 0) throw Engine::Exception("Failed function execution");
+
+        ctx->Release();
+
+    }
+
+}
 
 #endif //NOWHEREFIGHTERS_SCRIPTWRAPPER_H

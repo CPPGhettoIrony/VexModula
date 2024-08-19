@@ -22,7 +22,7 @@ namespace Game {
 
         void update() override;
 
-        void receive(Entity* sender, const string& header, stringstream& data) override;
+        void receive(Entity* sender, string& header, stringstream& data) override;
 
     };
 
