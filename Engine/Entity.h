@@ -25,17 +25,17 @@ namespace Engine {
 
         string name;
 
+        SETCREF()
+
     protected:
 
         string currentAnim;
         Vec2 drawSize;
 
-        void orderByY(int layer=0);
-
     public:
 
         explicit Entity(const string& n, Sprite* s, const Vec2& d, const Vec2& p, float dp=.0):
-            name(n), initpos(p), spr(s), pos(p), frame(0), counter(0), solid(false), depth(dp), drawSize{1,1} {
+            name(n), initpos(p), spr(s), pos(p), frame(0), counter(0), solid(false), depth(dp), drawSize{1,1}, SETREFCOUNT() {
             collisionRect = Rect{pos[0]-d[0]/2,pos[1],d[0],d[1]};
         }
 
@@ -51,18 +51,18 @@ namespace Engine {
         [[nodiscard]] const Vec2& getInitPos() const {return initpos;}
         [[nodiscard]] const Rect& getCollisionRect() const {return collisionRect;}
 
-        [[nodiscard]] const Sprite* getSprite() const {return spr;}
-              Sprite* getSprite()       {return spr;}
+        [[nodiscard]] Sprite* getSprite() const {return spr;}
 
         [[nodiscard]] const string& getName() const {return name;}
 
         [[nodiscard]] float getDepth() const {return depth;}
         void setDepth(float f) {depth = f;}
+        void orderByY(int layer=0);
 
         virtual void draw(const Rect& view);
         virtual void update() {}
         virtual void init() {}
-        virtual void collision(const Entity*) {}
+        virtual void collision(const Entity&) {}
         virtual void wallcollision(const Rect&);
         virtual void exitView() {}
         virtual void enterView() {}

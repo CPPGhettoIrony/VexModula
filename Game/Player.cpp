@@ -56,7 +56,7 @@ namespace Game {
     void Player::init() {
         Entity::init();
 
-        Mail::send2any(this,"NPC","Sample Message", getDelta());
+        Mail::send2any(*this,"NPC","Sample Message", getDelta());
 
     }
 

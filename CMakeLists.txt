@@ -167,7 +167,7 @@ if(${ARCHFLAGS} MATCHES "^aarch64")
             set(ANGELSCRIPT_SOURCE ${ANGELSCRIPT_SOURCE} ../../source/as_callfunc_arm64.cpp ../../source/as_callfunc_arm64_gcc.S)
         else()
             set(ANGELSCRIPT_SOURCE ${ANGELSCRIPT_SOURCE} ../../source/as_callfunc_arm64.cpp ../../source/as_callfunc_arm64_xcode.S
-                    Engine/ScriptObjects.h)
+                    Engine/AngelMacros.h)
         endif()
     else()
         message(FATAL ERROR "ARM target requires a working assembler")

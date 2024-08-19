@@ -21,7 +21,6 @@ namespace Game {
         }
 
         void update() override;
-        void collision(const Entity*) override;
 
         void receive(Entity* sender, const string& header, stringstream& data) override;
 

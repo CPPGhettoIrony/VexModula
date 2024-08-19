@@ -3,8 +3,11 @@
 //
 
 #include <iostream>
+
 #include "../Engine/Exception.h"
 #include "ScriptWrapper.h"
+
+#include "../Engine/AngelMacros.h"
 
 using std::cout, std::cerr, std::endl;
 
@@ -30,6 +33,7 @@ void printVector(const Engine::Vector& in) {cout << in;}
 void printString(const string& in) {cout << in;}
 void printFloat(float in) {cout << in;}
 void printInt(int in) {cout << in;}
+void printPtr(size_t in) {cout << in;}
 
 void printBool(bool in) {
     if(in) cout << "true";
@@ -50,32 +54,31 @@ namespace Engine {
 
         RegisterStdString(engine);
 
-        // Register Global Functions
+        // Register Global basic functions
         {
             engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(printString), asCALL_CDECL);
             engine->RegisterGlobalFunction("void print(bool)", asFUNCTION(printBool), asCALL_CDECL);
             engine->RegisterGlobalFunction("void print(float)", asFUNCTION(printFloat), asCALL_CDECL);
             engine->RegisterGlobalFunction("void print(int16)", asFUNCTION(printInt), asCALL_CDECL);
+            engine->RegisterGlobalFunction("void print(uint32)", asFUNCTION(printPtr), asCALL_CDECL);
             engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
         }
 
         // Register Vector Classes
         {
 
-
             engine->RegisterObjectType("Vec2", 0, asOBJ_REF);
+
             engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f()", asFUNCTION(Vec2Factory_Default), asCALL_CDECL);
             engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(float a, float b)", asFUNCTION(Vec2Factory_Init), asCALL_CDECL);
             engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(const Vec2& in)", asFUNCTION(Vec2Factory_Copy), asCALL_CDECL);
-            engine->RegisterObjectBehaviour("Vec2", asBEHAVE_ADDREF, "void f()", asMETHOD(Vec2, addRef), asCALL_THISCALL);
-            engine->RegisterObjectBehaviour("Vec2", asBEHAVE_RELEASE, "void f()", asMETHOD(Vec2, release), asCALL_THISCALL);
+            REGISTERCREF(engine,"Vec2")
 
             engine->RegisterObjectType("Rect", 0, asOBJ_REF);
             engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f()", asFUNCTION(RectFactory_Default), asCALL_CDECL);
             engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(float, float, float, float)", asFUNCTION(RectFactory_Init), asCALL_CDECL);
             engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(const Rect& in)", asFUNCTION(RectFactory_Copy), asCALL_CDECL);
-            engine->RegisterObjectBehaviour("Rect", asBEHAVE_ADDREF, "void f()", asMETHOD(Rect, addRef), asCALL_THISCALL);
-            engine->RegisterObjectBehaviour("Rect", asBEHAVE_RELEASE, "void f()", asMETHOD(Rect, release), asCALL_THISCALL);
+            REGISTERCREF(engine,"Rect")
 
             engine->RegisterObjectBehaviour("Rect", asBEHAVE_FACTORY, "Rect@ f(const Vec2& in)", asFUNCTION(RectFactory_CopyVec2), asCALL_CDECL);
             engine->RegisterObjectBehaviour("Vec2", asBEHAVE_FACTORY, "Vec2@ f(const Rect& in)", asFUNCTION(Vec2Factory_CopyRect), asCALL_CDECL);
@@ -134,6 +137,35 @@ namespace Engine {
 
             engine->RegisterGlobalFunction("void print(const Vec2 &in)",   asFUNCTION(printVector), asCALL_CDECL);
             engine->RegisterGlobalFunction("void print(const Rect &in)",   asFUNCTION(printVector), asCALL_CDECL);
+        }
+
+        // Register Sprite stuff
+        {
+            engine->RegisterObjectType("Sprite", sizeof(Sprite*), asOBJ_VALUE | asOBJ_POD);
+            engine->RegisterGlobalFunction("Sprite& getSprite(const string &in)", asFUNCTION(SpriteContainer::getSprite), asCALL_CDECL);
+            engine->RegisterGlobalFunction("void print(const Sprite& in)", asFUNCTION(printPtr), asCALL_CDECL);
+        }
+
+        // Register Entity stuff
+        {
+            engine->RegisterObjectType("Entity", 0, asOBJ_REF);
+
+            REGISTERCREF(engine,"Entity")
+
+            engine->RegisterObjectMethod("Entity", "void setSolid()", asMETHOD(Entity, setSolid), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "bool isSolid() const", asMETHOD(Entity, isSolid), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void move(const Vec2& in)", asMETHOD(Entity, move), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setPos(const Vec2& in)", asMETHOD(Entity, setPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Vec2& getPos() const", asMETHOD(Entity, getPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Vec2& getDelta() const", asMETHOD(Entity, getDelta), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Vec2& getInitPos() const", asMETHOD(Entity, getInitPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Rect& getCollisionRect() const", asMETHOD(Entity, getPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "Sprite& getSprite() const", asMETHOD(Entity, getSprite), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const string& getName() const", asMETHOD(Entity, getName), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "float getDepth() const", asMETHOD(Entity, getDepth), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setDepth(float)", asMETHOD(Entity, setDepth), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void orderByY(int16)", asMETHOD(Entity, orderByY), asCALL_THISCALL);
+
         }
 
     }

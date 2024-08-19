@@ -13,10 +13,6 @@ namespace Game {
         orderByY();
     }
 
-    void NPC::collision(const Entity * e) {
-
-    }
-
     void NPC::receive(Entity *sender, const string &header, stringstream &data) {
         cout << "Header: " << header << " | Data: " << data.str() << " | Playerpos: " << sender->getPos() << '\n';
     }

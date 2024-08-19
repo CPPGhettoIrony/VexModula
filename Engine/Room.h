@@ -43,7 +43,9 @@ namespace Engine {
         explicit Room(const Rect &v) : view(v), tilemap(nullptr), loaded(false) {}
         ~Room() {if(loaded) Free();}
 
-        void setTileMap(TileMap* t) {tilemap = t; sprites.insert(t->getTileSet());}
+        void setTileMap(TileMap* t) {tilemap = t; if(tilemap) sprites.insert(t->getTileSet());}
+
+        void addSprite(Sprite* s) {sprites.insert(s);}
 
         void Load() {
             SpriteContainer::loadSprites(sprites);

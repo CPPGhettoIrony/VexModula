@@ -78,7 +78,7 @@ namespace Engine {
             for(auto j : activeEntities) {
                 if (i == j) continue;
                 if (i->isColliding(j->getCollisionRect()))
-                    i->collision(j);
+                    i->collision(*j);
             }
 
             for(auto r : activeWalls) {

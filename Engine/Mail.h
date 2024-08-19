@@ -49,16 +49,16 @@ namespace Engine {
         static void setRoom(Room* r) {room = r;}
 
         template <typename T>
-        static void send(Entity *s, Entity *r, const string& h, const T& content);
+        static void send(Entity &s, Entity &r, const string& h, const T& content);
 
         template <typename T>
-        static void send2any(Entity* s, const string& r, const string& h, const T& content);
+        static void send2any(Entity& s, const string& r, const string& h, const T& content);
 
         template <typename T>
-        static void send2type(Entity* s, const string& r, const string& h, const T& content);
+        static void send2type(Entity& s, const string& r, const string& h, const T& content);
 
         template <typename T>
-        static void send2all(Entity* s, const string& h, const T& content);
+        static void send2all(Entity& s, const string& h, const T& content);
 
         static void process();
 
@@ -69,29 +69,29 @@ namespace Engine {
     };
 
     template<typename T>
-    void Mail::send(Entity *s, Entity *r, const string &h, const T &content) {
-        Message m(s,r,h,"",false);
+    void Mail::send(Entity &s, Entity &r, const string &h, const T &content) {
+        Message m(&s,&r,h,"",false);
         m.getData() << content;
         messages.push(m);
     }
 
     template <typename T>
-    void Mail::send2any(Entity* s, const string& r, const string& h, const T& content) {
-        Message m(s,nullptr,h,r,false);
+    void Mail::send2any(Entity& s, const string& r, const string& h, const T& content) {
+        Message m(&s,nullptr,h,r,false);
         m.getData() << content;
         messages.push(m);
     }
 
     template <typename T>
-    void Mail::send2type(Entity* s, const string& r, const string& h, const T& content) {
-        Message m(s,nullptr,h,r,true);
+    void Mail::send2type(Entity& s, const string& r, const string& h, const T& content) {
+        Message m(&s,nullptr,h,r,true);
         m.getData() << content;
         messages.push(m);
     }
 
     template <typename T>
-    void Mail::send2all(Entity* s, const string& h, const T& content) {
-        Message m(s,nullptr,h,string{},true);
+    void Mail::send2all(Entity& s, const string& h, const T& content) {
+        Message m(&s,nullptr,h,string{},true);
         m.getData() << content;
         messages.push(m);
     }

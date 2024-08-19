@@ -23,6 +23,8 @@ void main() {
     print(F.getMidPoint()); print('\n');
     print(F.Collide(Rect(0,1,2,2))); print('\n');
     print(F.isColliding(E)); print('\n');
-    print(F.getTriAngle()); flush();
+    print(F.getTriAngle()); print('\n');
+
+    print(getSprite("Player")); flush();
 
 }
