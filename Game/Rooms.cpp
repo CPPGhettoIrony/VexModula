@@ -57,14 +57,12 @@ namespace Game {
         testRoom->getWalls().insert(rects[3]);
 
         auto* player = new Engine::ScriptEntity(SW,"Player", Vec2{60, 30});
-        player->construct();
-        //auto* player = new Player(Vec2{60, 30});
-        testRoom->addEntity(player);
+        auto* goomba0 = new Engine::ScriptEntity(SW, "NPC", Vec2{200, 200});
+        auto* goomba1 = new Engine::ScriptEntity(SW, "NPC", Vec2{100, 200});
 
-        auto* goomba = new Engine::ScriptEntity(SW, "NPC", Vec2{200, 200});
-        goomba->construct();
-        //auto* goomba = new NPC(Vec2{200,200});
-        testRoom->addEntity(goomba);
+        testRoom->addEntity(player);
+        testRoom->addEntity(goomba0);
+        testRoom->addEntity(goomba1);
 
         testRoom->setTileMap(Engine::TileMapContainer::getTileMap("tilemap0"));
     }
@@ -72,8 +70,7 @@ namespace Game {
     void buildRoom2(Room* testRoom) {
 
         auto* player = new Engine::ScriptEntity(SW,"Player", Vec2{100, 300});
-        player->construct();
-        //auto* player = new Player(Vec2{100, 300});
+        auto* goomba = new Engine::ScriptEntity(SW, "NPC", Vec2{100, 100});
 
         Engine::Rect* rects[] = {
                 new Rect{300,300,20,600},
@@ -84,7 +81,9 @@ namespace Game {
         testRoom->getWalls().insert(rects[0]);
         testRoom->getWalls().insert(rects[1]);
         testRoom->getWalls().insert(rects[2]);
+
         testRoom->addEntity(player);
+        testRoom->addEntity(goomba);
     }
 
 } // Game

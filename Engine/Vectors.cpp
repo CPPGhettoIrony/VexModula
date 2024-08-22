@@ -9,9 +9,6 @@
 
 using std::vector;
 
-#include <iostream>
-using std::cout;
-
 namespace Engine {
 
     const float Vector::nullvalue(0);

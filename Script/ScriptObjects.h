@@ -36,12 +36,13 @@ namespace Engine {
 
     class ScriptEntity : public Entity, public ScriptObject {
 
+        void construct();
+
     public:
 
         ScriptEntity(ScriptWrapper* w, const char* name, const Vec2& pos):
-            Entity(name, nullptr, {0,0}, pos), ScriptObject(w, name)  {}
+            Entity(name, nullptr, {0,0}, pos), ScriptObject(w, name)  {construct();}
 
-        void construct();
         void draw(Rect& view) override;
         void update() override {runFunction("void update()");}
         void init() override {Entity::init(); runFunction("void init()");}
