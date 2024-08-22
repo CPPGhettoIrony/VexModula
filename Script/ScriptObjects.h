@@ -31,7 +31,7 @@ namespace Engine {
     public:
 
         ScriptObject(ScriptWrapper* w, const char* name);
-
+        ~ScriptObject() {obj->Release();}
     };
 
     class ScriptEntity : public Entity, public ScriptObject {
