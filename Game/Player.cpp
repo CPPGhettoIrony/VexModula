@@ -45,7 +45,7 @@ namespace Game {
 
         move(vel);
 
-        orderByY();
+        orderByY(0);
     }
 
     void Player::draw(Rect & view) {

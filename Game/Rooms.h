@@ -21,6 +21,9 @@ namespace Game {
 
     };
 
+    void initScriptWrapper();
+    void deleteScriptWrapper();
+
     void buildRoom1(Room* r);
     void buildRoom2(Room* r);
 

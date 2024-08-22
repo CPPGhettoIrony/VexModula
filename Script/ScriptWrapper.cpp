@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <raylib.h>
 
 #include "../Engine/Exception.h"
 #include "ScriptWrapper.h"
@@ -67,6 +68,13 @@ namespace Engine {
             engine->RegisterGlobalFunction("void print(int16)", asFUNCTION(printInt), asCALL_CDECL);
             engine->RegisterGlobalFunction("void print(uint32)", asFUNCTION(printPtr), asCALL_CDECL);
             engine->RegisterGlobalFunction("void flush()", asFUNCTION(flush), asCALL_CDECL);
+        }
+
+        // Register Raylib stuff
+        {
+            engine->RegisterGlobalFunction("bool IsKeyDown(int16)", asFUNCTION(IsKeyDown), asCALL_CDECL);
+            engine->RegisterGlobalFunction("bool IsKeyPressed(int16)", asFUNCTION(IsKeyPressed), asCALL_CDECL);
+            engine->RegisterGlobalFunction("bool IsKeyReleased(int16)", asFUNCTION(IsKeyReleased), asCALL_CDECL);
         }
 
         // Register Vector Classes
@@ -146,8 +154,8 @@ namespace Engine {
 
         // Register Sprite stuff
         {
-            engine->RegisterObjectType("Sprite", sizeof(Sprite*), asOBJ_VALUE | asOBJ_POD);
-            engine->RegisterGlobalFunction("Sprite& getSprite(const string &in)", asFUNCTION(SpriteContainer::getSprite), asCALL_CDECL);
+            engine->RegisterObjectType("Sprite", sizeof(Sprite*), asOBJ_VALUE | asOBJ_POD | asOBJ_APP_PRIMITIVE);
+            engine->RegisterGlobalFunction("Sprite getSprite(const string &in)", asFUNCTION(SpriteContainer::getSprite), asCALL_CDECL);
             engine->RegisterGlobalFunction("void print(const Sprite& in)", asFUNCTION(printPtr), asCALL_CDECL);
         }
 
@@ -157,20 +165,24 @@ namespace Engine {
 
             REGISTERCREF(engine,"Entity")
 
-            engine->RegisterObjectMethod("Entity", "void setCurrentAnim(const string& in)", asMETHOD(ScriptEntity, setCurrentAnim), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "void setSolid()", asMETHOD(ScriptEntity, setSolid), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "bool isSolid() const", asMETHOD(ScriptEntity, isSolid), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "void move(const Vec2& in)", asMETHOD(ScriptEntity, move), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "void setPos(const Vec2& in)", asMETHOD(ScriptEntity, setPos), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "const Vec2& getPos() const", asMETHOD(ScriptEntity, getPos), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "const Vec2& getDelta() const", asMETHOD(ScriptEntity, getDelta), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "const Vec2& getInitPos() const", asMETHOD(ScriptEntity, getInitPos), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "const Rect& getCollisionRect() const", asMETHOD(ScriptEntity, getPos), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "Sprite& getSprite() const", asMETHOD(ScriptEntity, getSprite), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "const string& getName() const", asMETHOD(ScriptEntity, getName), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "float getDepth() const", asMETHOD(ScriptEntity, getDepth), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "void setDepth(float)", asMETHOD(ScriptEntity, setDepth), asCALL_THISCALL);
-            engine->RegisterObjectMethod("Entity", "void orderByY(int16)", asMETHOD(ScriptEntity, orderByY), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void Collide(const Entity& in)", asMETHOD(Entity, Collide), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setDimensions(const Vec2& in)", asMETHOD(Entity, setDimensions), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setDrawSize(const Vec2& in)", asMETHOD(Entity, setDrawSize), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setCurrentAnim(const string& in)", asMETHOD(Entity, setCurrentAnim), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setSolid()", asMETHOD(Entity, setSolid), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "bool isSolid() const", asMETHOD(Entity, isSolid), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void move(const Vec2& in)", asMETHOD(Entity, move), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setPos(const Vec2& in)", asMETHOD(Entity, setPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Vec2& getPos() const", asMETHOD(Entity, getPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Vec2& getDelta() const", asMETHOD(Entity, getDelta), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Vec2& getInitPos() const", asMETHOD(Entity, getInitPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const Rect& getCollisionRect() const", asMETHOD(Entity, getPos), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "Sprite getSprite() const", asMETHOD(Entity, getSprite), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setSprite(Sprite)", asMETHOD(Entity, setSprite), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "const string& getName() const", asMETHOD(Entity, getName), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "float getDepth() const", asMETHOD(Entity, getDepth), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void setDepth(float)", asMETHOD(Entity, setDepth), asCALL_THISCALL);
+            engine->RegisterObjectMethod("Entity", "void orderByY(int16)", asMETHOD(Entity, orderByY), asCALL_THISCALL);
 
         }
 
@@ -193,10 +205,12 @@ namespace Engine {
     }
 
     void ScriptWrapper::runFunction(asIScriptFunction *func) const {
+
+        if(!func) return;
         ctx->Prepare(func);
+
         auto r = ctx->Execute();
         if (r < 0) throw Engine::Exception("Failed function execution");
-        ctx->Release();
     }
 
     //void ScriptWrapper::

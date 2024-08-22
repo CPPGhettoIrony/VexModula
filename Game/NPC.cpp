@@ -10,7 +10,7 @@ using std::cout;
 namespace Game {
 
     void NPC::update() {
-        orderByY();
+        orderByY(0);
     }
 
     void NPC::receive(Entity *sender, string &header, stringstream &data) {

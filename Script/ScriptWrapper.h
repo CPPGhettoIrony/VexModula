@@ -28,6 +28,7 @@ namespace Engine {
         ScriptWrapper();
 
         [[nodiscard]] asIScriptEngine* getEngine() const {return engine;}
+        [[nodiscard]] asIScriptContext* getContext() const {return ctx;}
 
         void createModule(const char* name, const vector<string>& files) const;
         void runFunction(asIScriptFunction* func) const;
@@ -36,6 +37,7 @@ namespace Engine {
         void runFunctionWithArgs(asIScriptFunction* func, F processArgs) const;
 
         ~ScriptWrapper() {
+            ctx->Release();
             engine->ShutDownAndRelease();
         }
 
@@ -44,14 +46,13 @@ namespace Engine {
     template<typename F>
     void ScriptWrapper::runFunctionWithArgs(asIScriptFunction* func, F processArgs) const {
 
-        ctx->Prepare(func);
+        if(!func) return;
 
+        ctx->Prepare(func);
         processArgs(ctx);
 
         auto r = ctx->Execute();
         if (r < 0) throw Engine::Exception("Failed function execution");
-
-        ctx->Release();
 
     }
 

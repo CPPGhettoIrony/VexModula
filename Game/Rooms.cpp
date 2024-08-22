@@ -7,10 +7,24 @@
 #include "Rooms.h"
 
 #include "../Engine/TileMap.h"
+#include "../Script/ScriptObjects.h"
+#include "../Script/ScriptWrapper.h"
 
 using Engine::Vec2;
 
+Engine::ScriptWrapper* SW;
+
 namespace Game {
+
+    void initScriptWrapper() {
+        SW = new Engine::ScriptWrapper();
+        SW->createModule("Player", {"../res/sample/Player.as"});
+        SW->createModule("NPC", {"../res/sample/NPC.as"});
+    }
+
+    void deleteScriptWrapper() {
+        delete SW;
+    }
 
     void TestRoom::draw() {
 
@@ -42,17 +56,24 @@ namespace Game {
         testRoom->getWalls().insert(rects[2]);
         testRoom->getWalls().insert(rects[3]);
 
-        auto* player = new Player(Vec2{60, 30});
+        auto* player = new Engine::ScriptEntity(SW,"Player", Vec2{60, 30});
+        player->construct();
+        //auto* player = new Player(Vec2{60, 30});
         testRoom->addEntity(player);
 
-        auto* goomba = new NPC(Vec2{200,200});
+        auto* goomba = new Engine::ScriptEntity(SW, "NPC", Vec2{200, 200});
+        goomba->construct();
+        //auto* goomba = new NPC(Vec2{200,200});
         testRoom->addEntity(goomba);
 
         testRoom->setTileMap(Engine::TileMapContainer::getTileMap("tilemap0"));
     }
 
     void buildRoom2(Room* testRoom) {
-        auto* player = new Player(Vec2{100, 300});
+
+        auto* player = new Engine::ScriptEntity(SW,"Player", Vec2{100, 300});
+        player->construct();
+        //auto* player = new Player(Vec2{100, 300});
 
         Engine::Rect* rects[] = {
                 new Rect{300,300,20,600},

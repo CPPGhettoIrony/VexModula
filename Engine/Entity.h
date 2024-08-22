@@ -15,11 +15,11 @@ using std::string, std::stringstream;
 namespace Engine {
 
     class Entity {
+
         Sprite* spr;
         float depth;
         Rect collisionRect;
         Vec2 initpos,pos,delta;
-        bool solid;
 
         size_t frame, counter;
 
@@ -31,6 +31,7 @@ namespace Engine {
 
         string currentAnim;
         Vec2 drawSize;
+        bool solid;
 
     public:
 
@@ -39,19 +40,24 @@ namespace Engine {
             collisionRect = Rect{pos[0]-d[0]/2,pos[1],d[0],d[1]};
         }
 
+        void setSprite(Sprite* s) {spr = s;}
+        void setCurrentAnim(const string& n) {currentAnim = n;}
         void setSolid() {solid = true;}
+
+        void setDimensions(const Vec2&);
+        void setDrawSize(const Vec2& vec) {drawSize = vec;}
+
         [[nodiscard]] bool isSolid() const {return solid;}
         //this function will be called once on the constructors of children entities to permanently set themselves as solid
 
         void move(const Vec2&);
         void setPos(const Vec2&);
 
-        void setCurrentAnim(const string& n) {currentAnim = n;}
-
         [[nodiscard]] const Vec2& getPos() const {return pos;}
         [[nodiscard]] const Vec2& getDelta() const {return delta;}
         [[nodiscard]] const Vec2& getInitPos() const {return initpos;}
         [[nodiscard]] const Rect& getCollisionRect() const {return collisionRect;}
+        [[nodiscard]] Rect& getCollisionRect() {return collisionRect;}
 
         [[nodiscard]] Sprite* getSprite() const {return spr;}
 
@@ -59,18 +65,20 @@ namespace Engine {
 
         [[nodiscard]] float getDepth() const {return depth;}
         void setDepth(float f) {depth = f;}
-        void orderByY(int layer=0);
+        void orderByY(int);
 
         virtual void draw(Rect& view);
         virtual void update() {}
         virtual void init() {}
         virtual void collision(Entity&) {}
-        virtual void wallcollision(Rect&);
+        virtual void wallcollision(Rect& rect) {move(getCollisionRect().Collide(rect));}
         virtual void exitView() {}
         virtual void enterView() {}
         virtual void receive(Entity*, string&, stringstream&) {}
 
         [[nodiscard]] bool isColliding(const Rect& R) const {return collisionRect.isColliding(R);}
+
+        void Collide(Entity& E) {wallcollision(E.getCollisionRect());}
 
         virtual ~Entity() = default;
 
@@ -94,6 +102,8 @@ namespace Engine {
     };
 
     bool operator<(const layeredEntity& a, const layeredEntity& b);
+
+
 
 } // Engine
 

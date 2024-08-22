@@ -5,6 +5,8 @@
 #ifndef NOWHEREFIGHTERS_SCRIPTOBJECTS_H
 #define NOWHEREFIGHTERS_SCRIPTOBJECTS_H
 
+#include "angelscript/include/angelscript.h"
+#include "angelscript/source/as_objecttype.h"
 #include "ScriptWrapper.h"
 #include "../Engine/Entity.h"
 
@@ -15,17 +17,20 @@ namespace Engine {
     protected:
 
         ScriptWrapper* wrapper;
-        asIScriptModule* module;
 
-        void runFunction(const char* decl);
+        asIScriptEngine* engine;
+        asIScriptModule* module;
+        asITypeInfo* type;
+        asIScriptObject* obj;
+
+        void runFunction(const char* decl) const;
 
         template<typename F>
         void runFunctionWithArgs(const char* decl, F processArgs);
 
     public:
 
-        ScriptObject(ScriptWrapper* w, const char* name):
-            wrapper(w), module(w->getEngine()->GetModule(name)) {}
+        ScriptObject(ScriptWrapper* w, const char* name);
 
     };
 
@@ -36,22 +41,21 @@ namespace Engine {
         ScriptEntity(ScriptWrapper* w, const char* name, const Vec2& pos):
             Entity(name, nullptr, {0,0}, pos), ScriptObject(w, name)  {}
 
-        void construct() {runFunction("void _construct()");}
+        void construct();
         void draw(Rect& view) override;
-        void update() override {runFunction("void _update()");}
-        void init() override {runFunction("void _init()");}
+        void update() override {runFunction("void update()");}
+        void init() override {Entity::init(); runFunction("void init()");}
         void collision(Entity& ent) override;
         void wallcollision(Rect& rect) override;
-        void exitView() override {runFunction("void _exitview()");}
-        void enterView() override {runFunction("void _enterview()");}
-        void receive(Entity* e, string& str, stringstream& stream) override;
+        void exitView() override {runFunction("void exitview()");}
+        void enterView() override {runFunction("void enterview()");}
 
     };
 
     template<typename F>
     void ScriptObject::runFunctionWithArgs(const char* decl, F processArgs) {
-        wrapper->runFunctionWithArgs(module->GetFunctionByDecl(decl), [&](asIScriptContext* ctx) {
-            ctx->SetArgObject(0,this);
+        wrapper->runFunctionWithArgs(type->GetMethodByDecl(decl), [&](asIScriptContext* ctx) {
+            ctx->SetObject(obj);
             processArgs(ctx);
         });
     }

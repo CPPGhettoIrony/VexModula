@@ -6,35 +6,56 @@
 
 namespace Engine {
 
-    void ScriptObject::runFunction(const char* decl) {
-        wrapper->runFunctionWithArgs(module->GetFunctionByDecl(decl), [&](asIScriptContext* ctx) {
-            ctx->SetArgObject(0,this);
+    ScriptObject::ScriptObject(ScriptWrapper* w, const char* name):
+        wrapper(w),
+        module(w->getEngine()->GetModule(name)),
+        engine(w->getEngine()),
+        type(module->GetTypeInfoByDecl(name)) {
+
+            string decl = name;
+            decl += " @" + decl + "()";
+
+            auto *factory = type->GetFactoryByDecl(decl.c_str());
+            auto ctx = w->getContext();
+
+            ctx->Prepare(factory);
+            ctx->Execute();
+
+            obj = *(asIScriptObject**)ctx->GetAddressOfReturnValue();
+
+            obj->AddRef();
+
+    }
+
+    void ScriptObject::runFunction(const char* decl) const {
+        wrapper->runFunctionWithArgs(type->GetMethodByDecl(decl), [&](asIScriptContext* ctx) {
+            ctx->SetObject(obj);
+        });
+    }
+
+    void ScriptEntity::construct() {
+        runFunctionWithArgs("void construct(Entity& ent)", [&](asIScriptContext* ctx) {
+             ctx->SetArgObject(0, this);
         });
     }
 
     void ScriptEntity::draw(Rect& view) {
         Entity::draw(view);
-        runFunctionWithArgs("void _draw(const Rect& in)", [&](asIScriptContext* ctx){
-            ctx->SetArgObject(1, &view);
+        runFunctionWithArgs("void draw(const Rect& in)", [&](asIScriptContext* ctx){
+            ctx->SetArgObject(0, &view);
         });
     }
 
     void ScriptEntity::collision(Entity& ent) {
-        runFunctionWithArgs("void _collision(const Entity& in)", [&](asIScriptContext* ctx){
-            ctx->SetArgObject(1, &ent);
+        runFunctionWithArgs("void collision(Entity& ent)", [&](asIScriptContext* ctx){
+            ctx->SetArgObject(0, &ent);
         });
     }
 
     void ScriptEntity::wallcollision(Rect &rect) {
-        runFunctionWithArgs("void _wallcollision(const Rect& in)", [&](asIScriptContext* ctx){
-            ctx->SetArgObject(1, &rect);
-        });
-    }
-
-    void ScriptEntity::receive(Entity* e, string& str, stringstream& stream) {
-        runFunctionWithArgs("void _receive(const string& in)", [&](asIScriptContext* ctx) {
-            ctx->SetArgObject(1, e);
-            ctx->SetArgObject(2, &str);
+        Entity::wallcollision(rect);
+        runFunctionWithArgs("void wallcollision(const Rect& in)", [&](asIScriptContext* ctx){
+            ctx->SetArgObject(0, &rect);
         });
     }
 
