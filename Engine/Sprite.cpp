@@ -75,8 +75,5 @@ namespace Engine {
     }
 
     //Necessary functions to make the Sprite class work in angelscript
-    Sprite* spriteFactory() {
-        return new Sprite();
-    }
 
 }

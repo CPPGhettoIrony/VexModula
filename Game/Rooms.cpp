@@ -57,12 +57,18 @@ namespace Game {
         testRoom->getWalls().insert(rects[3]);
 
         auto* player = new Engine::ScriptEntity(SW,"Player", Vec2{60, 30});
-        auto* goomba0 = new Engine::ScriptEntity(SW, "NPC", Vec2{200, 200});
-        auto* goomba1 = new Engine::ScriptEntity(SW, "NPC", Vec2{100, 200});
+
+        int quantity = 1000, space = 2000;
+
+        for(size_t i=0; i<quantity; ++i) {
+            testRoom->addEntity(new Engine::ScriptEntity(SW, "NPC",
+                Vec2{static_cast<float>((rand()%space)-space/2), static_cast<float>((rand()%space)-space/2)}));
+            //testRoom->addEntity(new Game::NPC(Vec2{static_cast<float>((rand()%space)-space/2), static_cast<float>((rand()%space)-space/2)}));
+        }
 
         testRoom->addEntity(player);
-        testRoom->addEntity(goomba0);
-        testRoom->addEntity(goomba1);
+
+        //testRoom->addEntity(goomba1);
 
         testRoom->setTileMap(Engine::TileMapContainer::getTileMap("tilemap0"));
     }

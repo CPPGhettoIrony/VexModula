@@ -5,7 +5,6 @@
 #ifndef NOWHEREFIGHTERS_VECTORS_H
 #define NOWHEREFIGHTERS_VECTORS_H
 
-#include <initializer_list>
 #include <ostream>
 #include <raylib.h>
 #include <cmath>
@@ -14,164 +13,124 @@
 
 using std::size_t, std::ostream;
 
-typedef Vector2 rayVec2;
-
 namespace Engine {
 
     inline bool inside(float a , float b, float c) {
         return (a>b && a<=b+c);
     }
 
-    class Vector {
-
-    protected:
-        size_t size;
-        float* floats;
-        const static float nullvalue;
-        template <typename func>
-            void op(func);
-
-    public:
-
-        enum{X,Y,W,H};
-
-        Vector(size_t size=0);
-        Vector(const std::initializer_list<float>&,size_t);
-        Vector(const std::initializer_list<float>&);
-        Vector(const Vector&);
-
-        Vector operator+(const Vector&) const;
-        Vector operator-(const Vector&) const;
-        Vector operator*(const Vector&) const;
-        Vector operator/(const Vector&) const;
-
-        Vector& operator+=(const Vector&);
-        Vector& operator-=(const Vector&);
-
-        Vector operator+(float) const;
-        Vector operator-(float) const;
-        Vector operator*(float) const;
-        Vector operator/(float) const;
-
-        Vector& operator+=(float);
-        Vector& operator-=(float);
-
-        bool operator==(const Vector&);
-        bool operator!=(const Vector& vec) {return !(*this==vec);}
-
-        const float& operator[](size_t i) const {return (i<size) ? floats[i] : nullvalue;}
-        float& at(size_t i) {return floats[i];}
-
-        [[nodiscard]] size_t Size() const {return size;}
-
-        ~Vector() {delete[] floats;}
-    };
-
-    template <typename func>
-    void Vector::op(func foo) {
-        for(size_t i=0; i<size; ++i) floats[i] = foo(i);
-    }
-
     class ScriptWrapper;
 
-    class Vec2 : public Vector {
+    class Rect;
 
+    class Vec2 {
+
+        Vector2 vec;
         SETCREF()
-
-        // To make operators in Angelscript with reference types, this must be done in a special way
-        [[nodiscard]] Vec2& opAdd(const Vec2& vec) const;
-        [[nodiscard]] Vec2& opSub(const Vec2& vec) const;
-        [[nodiscard]] Vec2& opMul(const Vec2& vec) const;
-        [[nodiscard]] Vec2& opDiv(const Vec2& vec) const;
-
-        [[nodiscard]] Vec2& opAddAssign(const Vec2& vec);
-        [[nodiscard]] Vec2& opSubAssign(const Vec2& vec);
-        [[nodiscard]] Vec2& opMulAssign(const Vec2& vec);
-        [[nodiscard]] Vec2& opDivAssign(const Vec2& vec);
-
-        [[nodiscard]] Vec2& opAdd(float f) const;
-        [[nodiscard]] Vec2& opSub(float f) const;
-        [[nodiscard]] Vec2& opMul(float f) const;
-        [[nodiscard]] Vec2& opDiv(float f) const;
-
-        [[nodiscard]] Vec2& opAddAssign(float f);
-        [[nodiscard]] Vec2& opSubAssign(float f);
-        [[nodiscard]] Vec2& opMulAssign(float f);
-        [[nodiscard]] Vec2& opDivAssign(float f);
+        static const float nullValue;
 
     public:
-        Vec2(): Vector({}, 2), SETREFCOUNT() {}
-        Vec2(const float& a, const float& b): Vector({a,b}, 2), SETREFCOUNT() {}
-        explicit Vec2(const Vector& vec): Vector{{}, 2}, SETREFCOUNT() {
-            op([&](size_t i){return vec[i];});
-        }
-        [[nodiscard ]] rayVec2 toRaylibVector() const;
-        Vec2& operator=(const Vec2& vec) {for(size_t i=0; i < 2; ++i) floats[i] = vec.floats[i]; return *this;}
-        [[nodiscard]] float getDegrees() const {return atan2f(floats[X], floats[Y]) * 180 / 3.141;}
+
+        Vec2(): vec{0,0}, SETREFCOUNT() {}
+        Vec2(const float& a, const float& b): vec{a,b}, SETREFCOUNT() {}
+        Vec2(const Vec2& v): vec{v.vec.x,v.vec.y}, SETREFCOUNT() {}
+        Vec2(const Rect& r);
+
+        Vec2 operator+(const Vec2&) const;
+        Vec2 operator-(const Vec2&) const;
+        Vec2 operator*(const Vec2&) const;
+        Vec2 operator/(const Vec2&) const;
+
+        Vec2& operator+=(const Vec2&);
+        Vec2& operator-=(const Vec2&);
+        Vec2& operator*=(const Vec2&);
+        Vec2& operator/=(const Vec2&);
+
+        Vec2 operator+(float) const;
+        Vec2 operator-(float) const;
+        Vec2 operator*(float) const;
+        Vec2 operator/(float) const;
+
+        Vec2& operator+=(float);
+        Vec2& operator-=(float);
+        Vec2& operator*=(float);
+        Vec2& operator/=(float);
+
+        bool operator==(const Vec2&) const;
+
+        const float& operator[](size_t index) const;
+        float& at(size_t index)  {return index==0?vec.x:vec.y;}
+
+        [[nodiscard ]] Vector2 toRaylibVector() const {return vec;}
+        Vec2& operator=(const Vec2& v) {vec.x = v.vec.x; vec.y = v.vec.y; return *this;}
+        [[nodiscard]] float getDegrees() const {return atan2f(vec.x, vec.y) * 180 / 3.141;}
 
     };
 
-    class Rect : public Vector {
+    class Rect {
 
+        Rectangle rect;
         SETCREF()
-
-        // To make operators in Angelscript with reference types, this must be done in a special way
-        [[nodiscard]] Rect& opAdd(const Rect& rect) const;
-        [[nodiscard]] Rect& opSub(const Rect& rect) const;
-        [[nodiscard]] Rect& opMul(const Rect& rect) const;
-        [[nodiscard]] Rect& opDiv(const Rect& rect) const;
-
-        [[nodiscard]] Rect& opAddAssign(const Rect& rect);
-        [[nodiscard]] Rect& opSubAssign(const Rect& rect);
-        [[nodiscard]] Rect& opMulAssign(const Rect& rect);
-        [[nodiscard]] Rect& opDivAssign(const Rect& rect);
-
-        [[nodiscard]] Rect& opAdd(float f) const;
-        [[nodiscard]] Rect& opSub(float f) const;
-        [[nodiscard]] Rect& opMul(float f) const;
-        [[nodiscard]] Rect& opDiv(float f) const;
-
-        [[nodiscard]] Rect& opAddAssign(float f);
-        [[nodiscard]] Rect& opSubAssign(float f);
-        [[nodiscard]] Rect& opMulAssign(float f);
-        [[nodiscard]] Rect& opDivAssign(float f);
-
-        [[nodiscard]] Vec2& opGetPos() const;
-        [[nodiscard]] Vec2& opGetDim() const;
-        [[nodiscard]] Vec2& opGetMidPoint() const;
-        [[nodiscard]] Vec2& opCollide(const Rect&) const;
+        static const float nullValue;
 
     public:
-        Rect(): Vector({}, 4), SETREFCOUNT() {}
-        explicit Rect(const float& a, const float& b, const float& c, const float& d): Vector({a,b,c,d}), SETREFCOUNT() {}
-        Rect(const Vector& vec): Vector{{vec[0], vec[1], 0, 0},4}, SETREFCOUNT() {}
-        [[nodiscard]] Rectangle toRaylibRectangle() const;
-        [[nodiscard]] Vec2 getPos() const {return Vec2{floats[0], floats[1]};}
-        [[nodiscard]] Vec2 getDim() const {return Vec2{floats[2], floats[3]};}
+
+        Rect(): rect{0,0,0,0}, SETREFCOUNT() {}
+        explicit Rect(const float& a, const float& b, const float& c, const float& d): rect{a,b,c,d}, SETREFCOUNT() {}
+        Rect(const Rect& r): rect{r.rect.x, r.rect.y, r.rect.width, r.rect.height}, SETREFCOUNT() {}
+        Rect(const Vec2 &v);
+
+        Rect operator+(const Rect&) const;
+        Rect operator-(const Rect&) const;
+        Rect operator*(const Rect&) const;
+        Rect operator/(const Rect&) const;
+
+        Rect& operator+=(const Rect&);
+        Rect& operator-=(const Rect&);
+        Rect& operator*=(const Rect&);
+        Rect& operator/=(const Rect&);
+
+        Rect operator+(float) const;
+        Rect operator-(float) const;
+        Rect operator*(float) const;
+        Rect operator/(float) const;
+
+        Rect& operator+=(float);
+        Rect& operator-=(float);
+        Rect& operator*=(float);
+        Rect& operator/=(float);
+
+        bool operator==(const Rect&) const;
+
+        const float& operator[](size_t index) const;
+        float& at(size_t index);
+
+        [[nodiscard]] Rectangle toRaylibRectangle() const {return rect;}
+        [[nodiscard]] Vec2 getPos() const {return Vec2{rect.x, rect.y};}
+        [[nodiscard]] Vec2 getDim() const {return Vec2{rect.width, rect.height};}
         [[nodiscard]] Vec2 getMidPoint() const {return Vec2(getPos() + getDim() / 2);}
-        Rect& operator=(const Rect& vec) {for(size_t i=0;i<4;++i) floats[i] = vec.floats[i]; return *this;}
+        Rect& operator=(const Rect& rect) {for(size_t i=0;i<4;++i) this->at(i) = rect[i]; return *this;}
 
         [[nodiscard]] bool isColliding(const Rect& R) const;
         [[nodiscard]] Vec2 Collide(const Rect&) const;
         [[nodiscard]] float getTriAngle() const {
-            return -Vec2(Vec2{floats[X]+floats[W],floats[Y]+floats[H]}-getMidPoint()).getDegrees();
+            return -Vec2(Vec2{rect.x+rect.width,rect.y+rect.height}-getMidPoint()).getDegrees();
         }
 
     };
 
-    ostream& operator<<(ostream&, const Vector&);
+    ostream& operator<<(ostream&, const Vec2&);
+    ostream& operator<<(ostream&, const Rect&);
 
-    inline Vector* VectorFactory(size_t size) {return new Vector(size);}
+    inline Vec2* Vec2Factory_Default()                                  RETURNFACTORY(Vec2)
+    inline Vec2* Vec2Factory_Init(float a, float b)                     RETURNFACTORY(Vec2(a, b))
+    inline Vec2* Vec2Factory_Copy(const Vec2& vec)                      RETURNFACTORY(Vec2(vec))
+    inline Vec2* Vec2Factory_CopyRect(const Rect& rect)                 RETURNFACTORY(Vec2(rect))
 
-    inline Vec2* Vec2Factory_Default() {return new Vec2;}
-    inline Vec2* Vec2Factory_Init(float a, float b) {return new Vec2(a, b);}
-    inline Vec2* Vec2Factory_Copy(const Vec2& vec) {return new Vec2(vec);}
-    inline Vec2* Vec2Factory_CopyRect(const Rect& rect) {return new Vec2(rect);}
-
-    inline Rect* RectFactory_Default() {return new Rect;}
-    inline Rect* RectFactory_Init(float a, float b, float c, float d) {return new Rect(a, b, c, d);}
-    inline Rect* RectFactory_Copy(const Rect& rect) {return new Rect(rect);}
-    inline Rect* RectFactory_CopyVec2(const Vec2& vec) {return new Rect(vec);}
+    inline Rect* RectFactory_Default()                                  RETURNFACTORY(Rect)
+    inline Rect* RectFactory_Init(float a, float b, float c, float d)   RETURNFACTORY(Rect(a, b, c, d))
+    inline Rect* RectFactory_Copy(const Rect& rect)                     RETURNFACTORY(Rect(rect))
+    inline Rect* RectFactory_CopyVec2(const Vec2& vec)                  RETURNFACTORY(Rect(vec))
 
 }
 

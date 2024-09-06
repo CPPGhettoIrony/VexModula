@@ -88,6 +88,7 @@ namespace Engine {
 
         }
 
+        Mail::process();
 
     }
 
@@ -142,20 +143,17 @@ namespace Engine {
 
         if(tilemap) tilemap->postupdate();
 
-        Mail::process();
-
     }
 
     void Room::removeEntity(Entity *e) {
 
         for(auto i = entities.begin(); i != entities.end(); ++i)
-            if(i->second == e)
+            if(i->second == e) {
                 entities.erase(i);
-
-        sprites.erase(e->getSprite());
-        e->getSprite()->Free();
-
-        delete e;
+                sprites.erase(e->getSprite());
+                //e->getSprite()->Free();
+                delete e;
+        }
 
     }
 
@@ -173,6 +171,7 @@ namespace Engine {
     void Room::Free() {
 
         for(auto & e : entities) delete e.second;
+
         entities.clear();
         activeEntities.clear();
         sprites.clear();

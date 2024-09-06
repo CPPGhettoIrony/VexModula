@@ -51,9 +51,6 @@ namespace Engine {
         void playAnimation(const string&, const Vec2&, size_t, size_t&, size_t&, const Vec2& size = Vec2{1,1}) const;
         void playAnimationFrame(const string&, const Vec2&, size_t, const Vec2& size = Vec2{1,1}) const;
 
-        //Necessary functions to make the Sprite class work in angelscript
-        void AddRef() {}
-        void ReleaseRef() {}
     };
 
     typedef AnimatedSet<Animation,Vec2> HitboxSet;
@@ -85,7 +82,6 @@ namespace Engine {
     bool operator<(const layeredSprite& a, const layeredSprite& b);
 
     //Necessary functions to make the Sprite class work in angelscript
-    Sprite* spriteFactory();
 }
 
 #endif //NOWHEREFIGHTERS_SPRITE_H
